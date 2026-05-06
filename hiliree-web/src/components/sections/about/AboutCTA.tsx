@@ -27,7 +27,7 @@ export function AboutCTA() {
 
           {/* Description */}
           <p className="text-[16px] text-gray-500 max-w-2xl mx-auto leading-relaxed mb-8 font-light">
-            Hiliree stands as a steady foundation—a place to honor where we come from and shape where we are going. In a world defined by change, we remain committed to helping families build, preserve, and share their legacy.
+            Hiliree stands as a steady foundation, a place to honor where we come from and shape where we are going. In a world defined by change, we remain committed to helping families build, preserve, and share their legacy.
           </p>
 
           {/* Secondary message */}

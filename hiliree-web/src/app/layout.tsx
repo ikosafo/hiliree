@@ -2,6 +2,7 @@
 import { Montserrat, Poppins } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { ClientLayoutWrapper } from "@/app/ClientLayoutWrapper";
 import "./globals.css";
 
 const montserrat = Montserrat({ 
@@ -19,7 +20,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Hiliree — Your Family. Your Story.", template: "%s | Hiliree" },
+  title: { default: "Hiliree - Your Family. Your Story.", template: "%s | Hiliree" },
   description: "The private family app to build your tree, preserve memories, and stay connected.",
 };
 
@@ -27,9 +28,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${montserrat.variable} ${poppins.variable}`}>
       <body className="font-poppins bg-brand-cream text-gray-900 antialiased min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <ClientLayoutWrapper>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </ClientLayoutWrapper>
       </body>
     </html>
   );

@@ -11,7 +11,7 @@ const features = [
   {
     icon: Heart,
     title: "Smart, Customizable Profiles",
-    description: "Capture meaningful details—photos, locations, timelines, milestones—and preserve each member's presence within the family legacy.",
+    description: "Capture meaningful details, photos, locations, timelines, milestones, and preserve each member's presence within the family legacy.",
   },
   {
     icon: Lock,
@@ -152,7 +152,7 @@ export function AboutValues() {
             Your Family. Your Story. <span className="italic font-light text-white/60">Nobody Else&apos;s.</span>
           </h3>
           <p className="max-w-2xl mx-auto text-white/40 text-[16px] leading-relaxed font-light">
-            Hiliree is more than a platform—it&apos;s a compass for families who value unity, heritage, and lasting connection.
+            Hiliree is more than a platform, it&apos;s a compass for families who value unity, heritage, and lasting connection.
           </p>
         </motion.div>
       </div>

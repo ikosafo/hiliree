@@ -20,7 +20,7 @@ export function AboutHero() {
             Grounded in family.
           </h1>
           <p className="mt-6 text-sm max-w-lg mx-auto leading-relaxed text-gray-500">
-            Hiliree was founded on the conviction that every family carries a legacy worth preserving — and that legacy deserves to be protected.
+            Hiliree was founded on the conviction that every family carries a legacy worth preserving, and that legacy deserves to be protected.
           </p>
         </motion.div>
       </div>

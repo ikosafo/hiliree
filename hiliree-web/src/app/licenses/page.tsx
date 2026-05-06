@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { LegalPageLayout } from "@/components/layout/LegalPageLayout";
 
 export const metadata: Metadata = { 
-  title: "Licenses & Third-Party — Hiliree",
+  title: "Licenses & Third-Party - Hiliree",
   description: "Information about third-party services and open-source components used by Hiliree."
 };
 

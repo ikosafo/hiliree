@@ -1,8 +1,47 @@
-﻿"use client";
+"use client";
 import Link from "next/link";
 import Image from "next/image";
-import { ShieldCheck, Users, Camera, GitBranch } from "lucide-react";
+import { ShieldCheck, Users, Camera, GitBranch, ArrowRight } from "lucide-react";
 import { motion, type Transition } from "framer-motion";
+
+const iconMap: Record<string, any> = {
+  GitBranch,
+  Camera,
+  Users,
+  ShieldCheck,
+};
+
+
+/* ─────────────────────────────────────────────
+   WordPress Data Types
+───────────────────────────────────────────── */
+export interface FloatingCardData {
+  icon: string;
+  title: string;
+  subtitle: string;
+  positionClass: string;
+}
+
+export interface HeroData {
+  titleLine1: string;
+  titleLine2: string;
+  titleLine3: string;
+  subtitle: string;
+  boldenedText: string;
+  ctaText: string;
+  ctaTextTwo: string;
+  ctaUrl: string;
+  backgroundImage: {
+    node: {
+      sourceUrl: string;
+    };
+  };
+  floatingCards: {
+    card1: FloatingCardData;
+    card2: FloatingCardData;
+    card3: FloatingCardData;
+  };
+}
 
 /* ─────────────────────────────────────────────
    Shared easing curve
@@ -23,6 +62,22 @@ const floatIn = (dir: "left" | "right", delay: number) => ({
   animate: { opacity: 1, x: 0, y: 0, scale: 1 },
   transition: { delay, duration: 0.7, ease: EASE } satisfies Transition,
 });
+
+/* ─────────────────────────────────────────────
+   Apple Logo SVG Component
+───────────────────────────────────────────── */
+function AppleLogo({ className }: { className?: string }) {
+  return (
+    <svg 
+      viewBox="0 0 24 24" 
+      className={className}
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M17.05 20.28c-.98.95-2.05.88-3.08.44-1.05-.45-2.01-.44-3.08 0-1.07.44-2.14.51-3.08-.44-2.48-2.38-3.08-6.23-1.87-9.04.83-1.92 2.38-3.11 4.03-3.11 1.44 0 2.34.67 3.08.67.73 0 1.96-.74 3.41-.63 1.39.1 2.67.85 3.49 2.14-3.02 1.65-2.57 5.89.49 7.4-.67 1.27-1.56 2.86-2.49 3.57zM15.16 3.37c.74-.97 1.24-2.28 1.03-3.37-1.03.07-2.27.7-3.01 1.7-.68.9-1.22 2.24-.98 3.46 1.08.06 2.21-.62 2.96-1.79z"/>
+    </svg>
+  );
+}
 
 /* ─────────────────────────────────────────────
    Organic blob
@@ -93,49 +148,17 @@ function FloatingCard({
         <Icon size={16} style={{ color: iconColor }} strokeWidth={2.2} />
       </motion.div>
       <div className="flex-1">
-        <p className="text-[12.5px] font-bold text-gray-900 leading-tight font-poppins">{title}</p>
-        <p className="text-[9px] text-gray-400 leading-tight mt-0.5 font-poppins">{sub}</p>
+        <p className="text-[12px] font-bold text-gray-900 leading-tight font-poppins">{title}</p>
+        <p className="text-[11px] text-gray-500 leading-tight mt-0.5 font-poppins">{sub}</p>
       </div>
     </motion.div>
   );
 }
 
 /* ─────────────────────────────────────────────
-   Ring decoration component
-───────────────────────────────────────────── */
-function PhoneRings({ className = "" }: { className?: string }) {
-  return (
-    <div className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}>
-      {/* Outer ring */}
-      <motion.div
-        className="absolute rounded-full border opacity-[0.06]"
-        style={{ 
-          borderColor: "#41307e",
-          width: "110%",
-          height: "110%",
-        }}
-        animate={{ rotate: -360 }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      />
-      {/* Inner ring */}
-      <motion.div
-        className="absolute rounded-full border opacity-[0.1]"
-        style={{ 
-          borderColor: "#41307e",
-          width: "92%",
-          height: "92%",
-        }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      />
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
    Main hero - REVAMPED
 ───────────────────────────────────────────── */
-export function HeroSection() {
+export function HeroSection({ data }: { data: HeroData }) {
   return (
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
@@ -191,98 +214,127 @@ export function HeroSection() {
             </motion.span>
           </motion.div>
 
-          {/* Headline - Single line with serif font */}
-          <motion.h1
-            {...stagger(1)}
-            className="font-['Cormorant_Garamond',serif] leading-[1.05] tracking-[-0.02em] font-bold mb-6"
-            style={{ 
-              fontSize: "clamp(3rem, 5.5vw, 4.5rem)",
-              color: "#2D206A"
-            }}
-          >
-            Your Family.<br />
-            <em style={{ color: "#1a56ff", fontStyle: "italic" }}>Your Story.</em><br />
-            Nobody Else&apos;s.
-          </motion.h1>
+          {/* Headline - REDUCED FONT SIZE */}
+          <div className="space-y-2 md:space-y-0">
+            <motion.h1
+              {...stagger(1)}
+              className="font-montserrat leading-[1.1] tracking-[-0.02em] font-bold"
+              style={{ 
+                fontSize: "clamp(40px, 6vw, 64px)",
+                color: "#41307e"
+              }}
+            >
+              {data.titleLine1}
+            </motion.h1>
+            <motion.h1
+              {...stagger(2)}
+              className="font-montserrat leading-[1.1] tracking-[-0.02em] font-bold"
+              style={{ 
+                fontSize: "clamp(40px, 6vw, 64px)",
+                color: "#41307e"
+              }}
+            >
+              {data.titleLine2}
+            </motion.h1>
+            
+            {/* Nobody Else's - BLUE COLOR */}
+            <motion.div
+              {...stagger(3)}
+              className="relative inline-block"
+            >
+              <h1
+                className="font-montserrat leading-[1.1] tracking-[-0.02em] font-bold"
+                style={{
+                  fontSize: "clamp(40px, 6vw, 64px)",
+                  background: "linear-gradient(135deg, #1a56ff 0%, #5b8eff 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  display: "inline-block",
+                  overflow: "visible",
+                  padding: "0.1em 0",
+                }}
+              >
+                {data.titleLine3}
+              </h1>
+            </motion.div>
+          </div>
 
           {/* Sub-headline */}
           <motion.p
-            {...stagger(2)}
+            {...stagger(4)}
             className="text-[18px] text-gray-600 leading-[1.8] max-w-[480px] font-poppins font-light"
           >
-            Hiliree is the private family app to build your tree, preserve
-            memories, and stay connected{" "}
+            {data.subtitle}{" "}
             <motion.span 
               className="font-semibold bg-gradient-to-r from-[#41307e] to-[#6b5bb5] bg-clip-text text-transparent"
               animate={{ opacity: [0.8, 1, 0.8] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
-              across generations.
+              {data.boldenedText}
             </motion.span>
           </motion.p>
 
-          {/* App store buttons - Equal sized */}
+          {/* App store buttons - DESKTOP: compact row, MOBILE: side by side */}
           <motion.div 
-            {...stagger(3)} 
+            {...stagger(5)} 
             className="flex flex-row gap-3 items-center pt-4"
           >
-            {/* Apple App Store */}
+            {/* Apple App Store - Compact */}
             <motion.div
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-fit"
             >
               <Link
-                href="https://apps.apple.com/app/hiliree/id6747322444"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 px-5 py-2.5 rounded-xl transition-all duration-300 min-w-[160px]"
+                href={data.ctaUrl}
+                className="group flex items-center gap-2.5 px-4 py-2.5 rounded-xl transition-all duration-300"
                 style={{
                   background: "linear-gradient(145deg, #2C2C2E 0%, #1C1C1E 100%)",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                   border: "1px solid rgba(255,255,255,0.08)"
                 }}
               >
-                <svg viewBox="0 0 24 24" className="w-5 h-5 shrink-0" fill="white">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
+                <AppleLogo className="w-4 h-4 text-white shrink-0" />
                 <div className="text-left">
                   <div className="text-[9px] font-medium text-gray-400 uppercase tracking-wider font-poppins leading-none">
-                    Download on
+                    {data.ctaText}
                   </div>
-                  <div className="text-[14px] font-semibold text-white leading-tight font-poppins">
+                  <div className="text-[13px] font-semibold text-white leading-tight font-poppins">
                     App Store
                   </div>
                 </div>
               </Link>
             </motion.div>
 
-            {/* Google Play */}
+            {/* Google Play - Compact */}
             <motion.div
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-fit"
             >
               <Link
-                href="https://play.google.com/store/apps/details?id=com.rootaft.hiliree_mobile&pcampaignid=web_share"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 px-5 py-2.5 rounded-xl transition-all duration-300 min-w-[160px]"
+                href="#"
+                className="group flex items-center gap-2.5 px-4 py-2.5 rounded-xl transition-all duration-300 border"
                 style={{
                   background: "linear-gradient(145deg, #2C2C2E 0%, #1C1C1E 100%)",
                   borderColor: "rgba(255,255,255,0.08)",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  border: "1px solid rgba(255,255,255,0.08)"
                 }}
               >
-                <svg viewBox="0 0 24 24" className="w-5 h-5 shrink-0" fill="white">
-                  <path d="M3.18 23.76c.29.16.62.24.97.21l12.67-7.31-2.78-2.78-10.86 9.88zM20.7 10.37L17.85 8.7 14.74 11.8l3.13 3.14 2.84-1.64c.81-.47.81-1.46-.01-1.93zM2.15 1.09A1.01 1.01 0 0 0 2 1.6v20.8c0 .22.05.42.15.57l.08.08L14.01 11.3v-.17L2.23 1.01l-.08.08zM3.18.24L15.85 7.54l-2.78 2.78L2.21.44c.33-.26.76-.31 1.08-.16l-.11-.04z"/>
-                </svg>
+                <div className="w-4 h-4 shrink-0 relative">
+                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none">
+                    <path d="M5 3.5L19 12L5 20.5V3.5Z" fill="#4ADE80" />
+                    <path d="M5 3.5L12.5 11L5 11V3.5Z" fill="#60A5FA" />
+                    <path d="M5 20.5L12.5 13L5 13V20.5Z" fill="#F87171" />
+                    <path d="M12.5 11L19 12L12.5 13L12.5 11Z" fill="#FBBF24" />
+                  </svg>
+                </div>
                 <div className="text-left">
                   <div className="text-[9px] font-medium text-gray-400 uppercase tracking-wider font-poppins leading-none">
-                    Get it on
+                    {data.ctaTextTwo}
                   </div>
-                  <div className="text-[14px] font-semibold text-white leading-tight font-poppins">
+                  <div className="text-[13px] font-semibold text-white leading-tight font-poppins">
                     Google Play
                   </div>
                 </div>
@@ -292,7 +344,7 @@ export function HeroSection() {
 
           {/* Enhanced trust signal */}
           <motion.div
-            {...stagger(4)}
+            {...stagger(6)}
             className="inline-flex items-center gap-3 text-[13px] text-gray-500 font-poppins pt-2"
           >
             <motion.div
@@ -314,145 +366,109 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 60, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.9, ease: EASE } satisfies Transition}
-          className="hidden lg:flex justify-center items-center relative"
+          className="hidden lg:flex justify-center items-center relative perspective"
         >
-          {/* Phone container with rings */}
-          <div className="relative flex items-center justify-center">
-            {/* Glow pool beneath */}
-            <motion.div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[280px] h-32 blur-3xl rounded-full opacity-50"
-              style={{ 
-                background: "linear-gradient(90deg, rgba(23,17,61,0.35), rgba(29,22,65,0.35))",
-              }}
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.4, 0.6, 0.4],
-              }}
-              transition={{ duration: 4, repeat: Infinity }}
+          {/* Enhanced glow pool */}
+          <motion.div
+            className="absolute inset-x-0 bottom-0 h-48 blur-3xl rounded-full opacity-50"
+            style={{ 
+              background: "linear-gradient(90deg, rgba(23,17,61,0.35), rgba(29,22,65,0.35))",
+            }}
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.4, 0.6, 0.4],
+            }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+
+          {/* Enhanced ring halos with animation */}
+          <motion.div
+            className="absolute w-[360px] h-[360px] rounded-full border opacity-10"
+            style={{ borderColor: "#41307e", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div
+            className="absolute w-[450px] h-[450px] rounded-full border opacity-[0.05]"
+            style={{ borderColor: "#41307e", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}
+            animate={{ rotate: -360 }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          />
+
+          {/* Phone image with parallax */}
+          <motion.div 
+            className="relative w-[280px] h-[540px] z-10"
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Image
+              src={data.backgroundImage.node.sourceUrl}
+              alt="Hiliree app — family tree, memories, and connection"
+              fill
+              className="object-contain drop-shadow-[0_40px_80px_rgba(23,17,61,0.25)]"
+              priority
+              sizes="280px"
+              unoptimized
             />
+          </motion.div>
 
-            {/* Rings around phone */}
-            <PhoneRings />
-
-            {/* Phone image with parallax */}
-            <motion.div 
-              className="relative w-[280px] h-[540px] z-10"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Image
-                src="/images/hero-img.webp"
-                alt="Hiliree app — family tree, memories, and connection"
-                fill
-                className="object-contain drop-shadow-[0_40px_80px_rgba(23,17,61,0.25)]"
-                priority
-                sizes="280px"
+                   {/* Dynamic Floating Cards */}
+          {[data.floatingCards.card1, data.floatingCards.card2, data.floatingCards.card3]
+            .filter(card => card.icon && card.title)
+            .map((card, i) => (
+              <FloatingCard
+                key={i}
+                icon={iconMap[card.icon] || Users}
+                bg={i === 0 ? "rgba(23,17,61,0.08)" : i === 1 ? "#FEF3C7" : "#DCFCE7"}
+                iconColor={i === 0 ? "#503c9d" : i === 1 ? "#F59E0B" : "#10B981"}
+                title={card.title}
+                sub={card.subtitle}
+                motionProps={floatIn(i === 1 ? "right" : "left", 0.7 + i * 0.25)}
+                className={card.positionClass}
               />
-            </motion.div>
-
-            {/* Floating Card — Family Tree */}
-            <FloatingCard
-              icon={GitBranch}
-              bg="rgba(23,17,61,0.08)"
-              iconColor="#503c9d"
-              title="Family Tree"
-              sub="4 generations added"
-              motionProps={floatIn("left", 0.7)}
-              className="-left-12 top-[8%]"
-            />
-
-            {/* Floating Card — Memory */}
-            <FloatingCard
-              icon={Camera}
-              bg="#FEF3C7"
-              iconColor="#F59E0B"
-              title="Memory Added"
-              sub="Summer 1987"
-              motionProps={floatIn("right", 0.95)}
-              className="-right-8 top-[40%]"
-            />
-
-            {/* Floating Card — Connected */}
-            <FloatingCard
-              icon={Users}
-              bg="#DCFCE7"
-              iconColor="#10B981"
-              title="Family Connected"
-              sub="12 members joined"
-              motionProps={floatIn("left", 1.2)}
-              className="-left-8 bottom-[10%]"
-            />
-          </div>
+            ))}
         </motion.div>
 
         {/* ════════════════════════════════
-            MOBILE phone (FIXED)
+            MOBILE phone (IMPROVED)
         ════════════════════════════════ */}
         <motion.div 
           initial={{ opacity: 0, y: 40, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="lg:hidden flex justify-center items-center pt-12 relative"
+          className="lg:hidden flex justify-center pt-12 relative"
         >
-          <div className="relative flex items-center justify-center">
-            {/* Mobile glow pool */}
-            <motion.div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-24 blur-2xl rounded-full opacity-40"
-              style={{ 
-                background: "linear-gradient(90deg, rgba(23,17,61,0.3), rgba(29,22,65,0.3))",
-              }}
-              animate={{
-                scale: [1, 1.08, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{ duration: 4, repeat: Infinity }}
-            />
-
-            {/* Mobile rings */}
-            <PhoneRings className="scale-75" />
-
+          <div className="relative w-56 h-[430px]">
             {/* Phone Image */}
-            <div className="relative w-56 h-[430px] z-10">
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
               <Image
-                src="/images/hero-img.webp"
+                src={data.backgroundImage.node.sourceUrl}
                 alt="Hiliree app"
                 fill
                 className="object-contain drop-shadow-2xl"
-                sizes="(max-width: 768px) 224px, 280px"
-                priority
+                sizes="224px"
               />
-            </div>
+            </motion.div>
 
             {/* Mobile Floating Cards */}
-            <FloatingCard
-              icon={GitBranch}
-              bg="rgba(23,17,61,0.08)"
-              iconColor="#503c9d"
-              title="Family Tree"
-              sub="4 generations"
-              motionProps={floatIn("left", 0.5)}
-              className="-left-10 top-[8%] scale-[0.85] origin-right"
-            />
-
-            <FloatingCard
-              icon={Camera}
-              bg="#FEF3C7"
-              iconColor="#F59E0B"
-              title="Memory"
-              sub="Summer 1987"
-              motionProps={floatIn("right", 0.75)}
-              className="-right-10 top-[40%] scale-[0.85] origin-left"
-            />
-
-            <FloatingCard
-              icon={Users}
-              bg="#DCFCE7"
-              iconColor="#10B981"
-              title="Connected"
-              sub="12 members"
-              motionProps={floatIn("left", 1)}
-              className="-left-8 bottom-[10%] scale-[0.85] origin-right"
-            />
+                        {/* Mobile Dynamic Floating Cards */}
+            {[data.floatingCards.card1, data.floatingCards.card2, data.floatingCards.card3]
+              .filter(card => card.icon && card.title)
+              .map((card, i) => (
+                <FloatingCard
+                  key={i}
+                  icon={iconMap[card.icon] || Users}
+                  bg={i === 0 ? "rgba(23,17,61,0.08)" : i === 1 ? "#FEF3C7" : "#DCFCE7"}
+                  iconColor={i === 0 ? "#503c9d" : i === 1 ? "#F59E0B" : "#10B981"}
+                  title={card.title}
+                  sub={card.subtitle}
+                  motionProps={floatIn(i === 1 ? "right" : "left", 0.5 + i * 0.25)}
+                  className={`${card.positionClass} scale-[0.85] ${i === 0 ? 'origin-right' : i === 1 ? 'origin-left' : 'origin-right'}`}
+                />
+              ))}
           </div>
         </motion.div>
       </div>

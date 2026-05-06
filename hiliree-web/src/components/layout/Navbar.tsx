@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, GraduationCap, GitBranch, Lightbulb, Sparkles } from "lucide-react";
 import { motion, AnimatePresence, type Transition } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 type NavLink = {
   label: string;
   href: string;
-  children?: { label: string; href: string; description: string }[];
+  children?: { label: string; href: string; description: string; icon?: React.ReactNode; isNew?: boolean }[];
 };
 
 const navLinks: NavLink[] = [
@@ -24,8 +24,9 @@ const navLinks: NavLink[] = [
     label: "Product",
     href: "#",
     children: [
-      { label: "How It Works",  href: "/#how-it-works",  description: "See the Hiliree experience step by step"   },
-      { label: "Features",      href: "/#features",      description: "Everything your family needs in one place"  },
+      { label: "How It Works",  href: "/#how-it-works",  description: "See the Hiliree experience step by step", icon: <GitBranch  size={14} /> },
+      { label: "Features",      href: "/#features",      description: "Everything your family needs in one place", icon: <Sparkles size={14} /> },
+      { label: "Learn Hiliree", href: "/#training", description: "Tutorials and guides to master Hiliree", icon: <Lightbulb size={14} />, isNew: true },
     ],
   },
   { label: "About",  href: "/about"  },
@@ -38,7 +39,6 @@ const navLinks: NavLink[] = [
 function isLinkActive(pathname: string, href: string): boolean {
   if (href.includes("#")) {
     const [path, hash] = href.split("#");
-    // Check if we're on the right page and hash matches
     if (pathname === path || (path === "/" && pathname === "/")) {
       if (typeof window !== "undefined") {
         return window.location.hash === `#${hash}`;
@@ -58,11 +58,9 @@ function useNavigateWithHash() {
   return (href: string) => {
     if (href.includes("#")) {
       const [path, hash] = href.split("#");
-      // If we're already on the same page, just update the hash
       if (typeof window !== "undefined" && window.location.pathname === path) {
         window.location.hash = `#${hash}`;
       } else {
-        // Navigate to the page with hash
         router.push(href);
       }
     } else {
@@ -95,10 +93,10 @@ function DropdownMenu({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 6, scale: 0.97 }}
           transition={{ duration: 0.2, ease: EASE } satisfies Transition}
-          className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[280px] z-50"
+          className="absolute top-[calc(100%+12px)] right-0 w-[300px] z-50"
         >
           {/* Arrow */}
-          <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-gray-100/80 rotate-45 shadow-[-2px_-2px_4px_rgba(0,0,0,0.04)]" />
+          <div className="absolute -top-1.5 right-6 w-3 h-3 bg-white border-l border-t border-gray-100/80 rotate-45 shadow-[-2px_-2px_4px_rgba(0,0,0,0.04)]" />
 
           <div
             className="relative bg-white/95 backdrop-blur-xl rounded-2xl border border-gray-100/80 overflow-hidden"
@@ -129,19 +127,30 @@ function DropdownMenu({
                           : "bg-[#41307e]/5 group-hover:bg-[#41307e]/10"
                       )}
                     >
-                      <span className={cn(
-                        "w-1.5 h-1.5 rounded-full bg-[#41307e]",
-                        active && "scale-125"
-                      )} />
+                      {item.icon ? (
+                        <span className={active ? "text-[#41307e]" : "text-gray-500 group-hover:text-[#41307e]"}>{item.icon}</span>
+                      ) : (
+                        <span className={cn(
+                          "w-1.5 h-1.5 rounded-full bg-[#41307e]",
+                          active && "scale-125"
+                        )} />
+                      )}
                     </div>
-                    <div>
-                      <div className={cn(
-                        "text-[13px] font-semibold transition-colors leading-tight",
-                        active
-                          ? "text-[#41307e]"
-                          : "text-gray-900 group-hover:text-[#41307e]"
-                      )}>
-                        {item.label}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className={cn(
+                          "text-[13px] font-semibold transition-colors leading-tight",
+                          active
+                            ? "text-[#41307e]"
+                            : "text-gray-900 group-hover:text-[#41307e]"
+                        )}>
+                          {item.label}
+                        </span>
+                        {item.isNew && (
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-[#41307e] bg-[#41307e]/10 px-1.5 py-0.5 rounded-full leading-none">
+                            New
+                          </span>
+                        )}
                       </div>
                       <div className="text-[11px] text-gray-400 mt-0.5 leading-snug">
                         {item.description}
@@ -184,20 +193,16 @@ function NavItem({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const navigate = useNavigateWithHash();
   
-  // Check if any child is active
   const hasActiveChild = link.children?.some((child) => isLinkActive(pathname, child.href));
   const isActive = !link.children && isLinkActive(pathname, link.href);
-  // Parent is active if a child is active
   const parentActive = hasActiveChild || false;
 
   const handleItemClick = () => {
     setOpen(false);
   };
 
-  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -206,7 +211,6 @@ function NavItem({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Close dropdown on route change
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
@@ -281,11 +285,15 @@ function MobileLink({
   label,
   pathname,
   onClose,
+  description,
+  isNew,
 }: {
   href: string;
   label: string;
   pathname: string;
   onClose: () => void;
+  description?: string;
+  isNew?: boolean;
 }) {
   const navigate = useNavigateWithHash();
   const active = isLinkActive(pathname, href);
@@ -297,17 +305,29 @@ function MobileLink({
         navigate(href);
       }}
       className={cn(
-        "w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-medium transition-colors",
+        "w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
         active
           ? "text-[#41307e] bg-[#41307e]/10"
           : "text-gray-700 hover:text-[#41307e] hover:bg-[#41307e]/5"
       )}
     >
       <span className={cn(
-        "w-1.5 h-1.5 rounded-full bg-[#41307e]/40",
+        "w-1.5 h-1.5 rounded-full bg-[#41307e]/40 shrink-0",
         active && "bg-[#41307e] scale-125"
       )} />
-      {label}
+      <div className="flex-1 min-w-0">
+        <div className="text-[15px] font-medium flex items-center gap-2">
+          {label}
+          {isNew && (
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#41307e] bg-[#41307e]/10 px-2 py-0.5 rounded-full">
+              New
+            </span>
+          )}
+        </div>
+        {description && (
+          <p className="text-[12px] text-gray-400 mt-0.5 leading-snug">{description}</p>
+        )}
+      </div>
     </button>
   );
 }
@@ -324,20 +344,18 @@ function MobileMenu({ onClose, pathname }: { onClose: () => void; pathname: stri
       transition={{ duration: 0.22, ease: EASE } satisfies Transition}
       className="lg:hidden fixed inset-x-0 top-[72px] z-40"
     >
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-white/95 backdrop-blur-xl border-t border-gray-100"
         style={{ boxShadow: "0 24px 48px rgba(0,0,0,0.08)" }}
       />
 
       <nav className="relative section-wrapper py-6">
-        {/* Links */}
         <div className="space-y-0.5">
-          {navLinks.map((link, i) => (
+          {navLinks.map((link) => (
             <div key={link.href}>
               {link.children ? (
                 <>
-                  <p className="px-4 pt-4 pb-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                  <p className="px-4 pt-4 pb-1 text-[10px] font-bold uppercase tracking-widest text-[#41307e]">
                     {link.label}
                   </p>
                   {link.children.map((child) => (
@@ -347,6 +365,8 @@ function MobileMenu({ onClose, pathname }: { onClose: () => void; pathname: stri
                       label={child.label}
                       pathname={pathname}
                       onClose={onClose}
+                      description={child.description}
+                      isNew={child.isNew}
                     />
                   ))}
                 </>
@@ -362,20 +382,17 @@ function MobileMenu({ onClose, pathname }: { onClose: () => void; pathname: stri
           ))}
         </div>
 
-        {/* Divider */}
         <div className="my-5 h-px bg-gray-100" />
 
-        {/* CTAs */}
         <div className="space-y-2.5 px-1">
           <Button variant="outline" href="/contact" fullWidth>
             Contact Us
           </Button>
-          <Button variant="primary" href="/#download" fullWidth>
-            Get the App — Free
+          <Button variant="primary" href="/#download" fullWidth className="!bg-[#41307e] hover:!bg-[#503c9d]">
+            Get the App, Free
           </Button>
         </div>
 
-        {/* Trust note */}
         <p className="mt-5 text-center text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
           <span>🔒</span> Private by design · Free to download
         </p>
@@ -393,24 +410,20 @@ export function Navbar() {
   const pathname = usePathname();
   const navigate = useNavigateWithHash();
 
-  // Lock body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
-  // Scroll listener
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 20);
-    h(); // run on mount
+    h();
     window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  // Check if contact page is active
   const isContactActive = pathname === "/contact";
 
   return (
@@ -426,7 +439,6 @@ export function Navbar() {
             : "bg-transparent"
         )}
       >
-        {/* Subtle top border shimmer when not scrolled */}
         {!scrolled && (
           <div
             className="absolute inset-x-0 top-0 h-px opacity-40"
@@ -440,51 +452,51 @@ export function Navbar() {
         <div className="section-wrapper relative flex items-center justify-between h-[72px]">
 
           {/* ── Logo ── */}
-          <button onClick={() => navigate("/")} className="flex items-center z-10 min-w-0"> 
-            <div className="relative h-10 w-32 sm:h-12 sm:w-[240px] md:w-[360px]"> {/* Changed width logic */}
+          <button onClick={() => navigate("/")} className="flex items-center z-10 min-w-0 shrink-0"> 
+            <div className="relative h-10 w-32 sm:h-12 sm:w-[200px] md:w-[280px]">
               <Image
                 src="/images/Favicon.png"
                 alt="Hiliree"
                 fill
                 className="object-contain object-left"
                 priority
-                sizes="(max-width: 768px) 128px, 360px"
+                sizes="(max-width: 768px) 128px, 280px"
               />
             </div>
           </button>
 
-          {/* ── Desktop nav - centered absolutely ── */}
-          <nav className="hidden lg:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2">
+          {/* ── Desktop nav + CTAs grouped to the right ── */}
+          <div className="hidden lg:flex items-center gap-1">
+            {/* Navigation links */}
             {navLinks.map((link) => (
               <NavItem key={link.href} link={link} pathname={pathname} />
             ))}
-          </nav>
+            
+            {/* Separator */}
+            <div className="w-px h-5 bg-gray-200 mx-2" />
 
-          {/* ── Desktop CTAs ── */}
-          <div className="hidden lg:flex items-center gap-2.5">
-            <div className="relative">
-              <button
-                onClick={() => navigate("/contact")}
-                className={cn(
-                  "relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200",
-                  isContactActive
-                    ? "text-[#41307e] bg-[#41307e]/10"
-                    : "text-gray-600 hover:text-[#41307e] hover:bg-gray-50"
-                )}
-              >
-                {isContactActive && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-[#41307e]/10"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                  />
-                )}
-                <span className="relative z-10">Contact</span>
-              </button>
-            </div>
+            {/* Contact button */}
+            <button
+              onClick={() => navigate("/contact")}
+              className={cn(
+                "relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200",
+                isContactActive
+                  ? "text-[#41307e] bg-[#41307e]/10"
+                  : "text-gray-600 hover:text-[#41307e] hover:bg-gray-50"
+              )}
+            >
+              {isContactActive && (
+                <motion.span
+                  layoutId="nav-pill"
+                  className="absolute inset-0 rounded-full bg-[#41307e]/10"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                />
+              )}
+              <span className="relative z-10">Contact</span>
+            </button>
 
-            {/* "Get the App" pill with shimmer */}
-            <div className="relative group">
+            {/* Get the App button */}
+            <div className="relative group ml-1">
               <div
                 className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"
                 style={{ background: "linear-gradient(135deg, #41307e, #503c9d)" }}
@@ -505,7 +517,7 @@ export function Navbar() {
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             className={cn(
-              "lg:hidden z-10 w-10 h-10 flex items-center justify-center rounded-xl transition-all shrink-0 ml-auto",
+              "lg:hidden z-10 w-10 h-10 flex items-center justify-center rounded-xl transition-all shrink-0 ml-4",
               mobileOpen
                 ? "bg-gray-100 text-gray-900"
                 : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -526,7 +538,6 @@ export function Navbar() {
         </div>
       </motion.header>
 
-      {/* ── Mobile menu (outside header for z-stacking) ── */}
       <AnimatePresence>
         {mobileOpen && <MobileMenu onClose={() => setMobileOpen(false)} pathname={pathname} />}
       </AnimatePresence>

@@ -14,7 +14,7 @@ export default function ContactPage() {
         <div>
           <span className="text-brand-blue font-semibold text-sm uppercase tracking-widest">Get in Touch</span>
           <h1 className="font-serif text-[40px] lg:text-[48px] mt-3 mb-6 text-gray-900 leading-tight">We&apos;re real people.<br />We really read this.</h1>
-          <p className="text-gray-600 text-lg leading-relaxed mb-12">Have a question, suggestion, or just want to say hello? We reply to every message personally — usually within 24 hours.</p>
+          <p className="text-gray-600 text-lg leading-relaxed mb-12">Have a question, suggestion, or just want to say hello? We reply to every message personally, usually within 24 hours.</p>
           <div className="space-y-6">
             {[
               { icon: Clock, label: "Response Time", value: "Within 24 hours" },

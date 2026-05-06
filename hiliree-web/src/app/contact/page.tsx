@@ -17,7 +17,7 @@ export default function ContactPage() {
             We are real people. We really read this.
           </h1>
           <p className="text-gray-600 text-sm leading-relaxed">
-            Have a question, suggestion, or just want to say hello? We reply to every message personally — usually within 24 hours.
+            Have a question, suggestion, or just want to say hello? We reply to every message personally usually within 24 hours.
           </p>
         </div>
 

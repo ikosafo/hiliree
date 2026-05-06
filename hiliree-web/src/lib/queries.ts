@@ -51,16 +51,39 @@ export const GET_MAIN_MENU = `
 export const GET_HOMEPAGE_DATA = `
   query HomepageData {
     page(id: "home", idType: URI) {
-      title
-      homepageSections {
-        homepageSections {
-          title
+      homePage {
+        hero {
+          titleLine1
+          titleLine2
+          titleLine3
           subtitle
+          boldenedText
           ctaText
+          ctaTextTwo
           ctaUrl
           backgroundImage {
             node {
               sourceUrl
+            }
+          }
+          floatingCards {
+            card1 {
+              icon
+              title
+              subtitle
+              positionClass
+            }
+            card2 {
+              icon
+              title
+              subtitle
+              positionClass
+            }
+            card3 {
+              icon
+              title
+              subtitle
+              positionClass
             }
           }
         }
@@ -68,6 +91,7 @@ export const GET_HOMEPAGE_DATA = `
     }
   }
 `;
+
 
 export const GET_FOOTER_MENU = `
   query FooterMenu {

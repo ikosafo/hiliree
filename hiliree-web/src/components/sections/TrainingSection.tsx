@@ -1,53 +1,48 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 const trainingVideos = [
   {
     id: 1,
-    title: "Build Your First Family Tree",
-    description: "Get started with Hiliree in minutes",
+    title: "How to Sign In to the Hiliree App",
+    description: "Get started with your family journey in minutes",
     embedUrl: "https://www.youtube.com/embed/fstMlzz5QH8",
-    thumbnail: "https://images.unsplash.com/photo-1633356122544-f134ef2944f1?w=500&h=300&fit=crop",
-    color: "#3B82F6",
-    bgGradient: "from-blue-600/30 to-blue-400/10",
+    thumbnail: "https://images.pexels.com/photos/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+    color: "#6366f1",
   },
   {
     id: 2,
-    title: "Connect with Family Members",
-    description: "Build meaningful relationships on Hiliree",
+    title: "Building Your Tree",
+    description: "Create your family tree from the ground up",
     embedUrl: "https://www.youtube.com/embed/a-K3grP8g4g",
-    thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop",
-    color: "#8B5CF6",
-    bgGradient: "from-purple-600/30 to-purple-400/10",
+    thumbnail: "https://images.pexels.com/photos/2253879/pexels-photo-2253879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+    color: "#a78bfa",
   },
   {
     id: 3,
-    title: "Explore Your Family History",
-    description: "Discover generations of stories with Hiliree",
+    title: "Expanding Tree",
+    description: "Add relatives and grow your family connections",
     embedUrl: "https://www.youtube.com/embed/vGO7RFiPYFY",
-    thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop",
-    color: "#EC4899",
-    bgGradient: "from-pink-600/30 to-pink-400/10",
+    thumbnail: "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+    color: "#e879f9",
   },
   {
     id: 4,
-    title: "Share Moments & Celebrate",
-    description: "Create lasting memories on Hiliree",
+    title: "Getting Familiar with Other Features",
+    description: "Explore messaging, privacy tools, and more",
     embedUrl: "https://www.youtube.com/embed/qs_q7GlIZ9s",
-    thumbnail: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500&h=300&fit=crop",
-    color: "#F59E0B",
-    bgGradient: "from-amber-600/30 to-amber-400/10",
+    thumbnail: "https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+    color: "#fbbf24",
   },
   {
     id: 5,
-    title: "Master Privacy & Security",
-    description: "Keep your Hiliree data protected and secure",
+    title: "Adding Moments & Events",
+    description: "Share memories and celebrate family milestones",
     embedUrl: "https://www.youtube.com/embed/h0SqEnMOF58",
-    thumbnail: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=300&fit=crop",
-    color: "#10B981",
-    bgGradient: "from-green-600/30 to-green-400/10",
+    thumbnail: "https://images.pexels.com/photos/3171837/pexels-photo-3171837.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+    color: "#34d399",
   },
 ];
 
@@ -78,20 +73,16 @@ function CarouselCard({
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       <div
-        className={`relative rounded-3xl overflow-hidden h-96 md:h-[420px] shadow-2xl border border-white/10 group cursor-pointer transition-all duration-500 ${
-          isCenter ? "ring-2" : "hover:border-white/20"
-        }`}
+        className="relative rounded-3xl overflow-hidden h-80 md:h-[380px] shadow-2xl group cursor-pointer transition-all duration-500"
         style={{
-          outline: isCenter ? `2px solid ${video.color}` : "none",
+          border: isCenter ? `2px solid ${video.color}` : `1px solid ${video.color}40`,
           boxShadow: isCenter
-            ? `0 0 60px ${video.color}40, inset 0 0 60px ${video.color}10`
-            : "0 20px 40px rgba(0,0,0,0.3)",
+            ? `0 0 60px ${video.color}30, inset 0 0 60px ${video.color}08`
+            : `0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px ${video.color}20`,
         }}
       >
-        {/* Video or Thumbnail */}
         <div className="w-full h-full bg-black relative overflow-hidden">
           {isCenter ? (
-            // Show actual video player when center
             <iframe
               width="100%"
               height="100%"
@@ -103,7 +94,6 @@ function CarouselCard({
               className="w-full h-full"
             />
           ) : (
-            // Show thumbnail preview when not center
             <>
               <img
                 src={video.thumbnail}
@@ -111,15 +101,13 @@ function CarouselCard({
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-all" />
-
-              {/* Play button overlay */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                   className="w-12 h-12 rounded-full flex items-center justify-center"
                   style={{
-                    background: `${video.color}`,
+                    background: video.color,
                     boxShadow: `0 0 20px ${video.color}60`,
                   }}
                 >
@@ -130,36 +118,31 @@ function CarouselCard({
           )}
         </div>
 
-        {/* Info Overlay */}
         <motion.div
           initial={false}
-          animate={{
-            opacity: isCenter ? 1 : 0.8,
-          }}
-          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 md:p-8"
+          animate={{ opacity: isCenter ? 1 : 0.8 }}
+          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 md:p-6"
         >
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-1.5">
             <div
               className="w-2 h-2 rounded-full"
               style={{ background: video.color }}
             />
             <span
-              className="text-xs font-bold uppercase tracking-wider"
+              className="text-[10px] font-bold uppercase tracking-wider"
               style={{ color: video.color }}
             >
               Tutorial {index + 1} of {totalItems}
             </span>
           </div>
-
-          <h3 className="text-lg md:text-2xl font-serif text-white mb-1">
+          <h3 className="text-lg md:text-xl font-bold text-white mb-0.5">
             {video.title}
           </h3>
-
           {isCenter && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-sm text-white/70"
+              className="text-xs text-white/60"
             >
               {video.description}
             </motion.p>
@@ -172,7 +155,6 @@ function CarouselCard({
 
 export function TrainingSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
   const [dragStart, setDragStart] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -188,7 +170,6 @@ export function TrainingSection() {
     setCurrentIndex(index);
   };
 
-  // Mouse drag support
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setDragStart(e.clientX);
@@ -197,20 +178,12 @@ export function TrainingSection() {
   const handleMouseUp = (e: React.MouseEvent) => {
     if (!isDragging) return;
     setIsDragging(false);
-
-    const dragEnd = e.clientX;
-    const diff = dragStart - dragEnd;
-
+    const diff = dragStart - e.clientX;
     if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
+      diff > 0 ? handleNext() : handlePrev();
     }
   };
 
-  // Touch swipe support
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true);
     setDragStart(e.touches[0].clientX);
@@ -219,95 +192,81 @@ export function TrainingSection() {
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (!isDragging) return;
     setIsDragging(false);
-
-    const dragEnd = e.changedTouches[0].clientX;
-    const diff = dragStart - dragEnd;
-
+    const diff = dragStart - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
+      diff > 0 ? handleNext() : handlePrev();
     }
   };
 
-  // Get visible cards (left, center, right)
   const getVisibleIndices = () => {
     const total = trainingVideos.length;
-    const left = (currentIndex - 1 + total) % total;
-    const center = currentIndex;
-    const right = (currentIndex + 1) % total;
-    return [left, center, right];
+    return [
+      (currentIndex - 1 + total) % total,
+      currentIndex,
+      (currentIndex + 1) % total,
+    ];
   };
 
   const visibleIndices = getVisibleIndices();
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f] overflow-hidden py-16 md:py-24">
-      {/* Animated background */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none">
+    <section id="training" className="relative bg-gradient-to-b from-[#252540] via-[#1E1E30] to-[#1A1A28] overflow-hidden py-14 md:py-16">
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
         <motion.div
-          animate={{
-            y: [0, 30, 0],
-            opacity: [0.3, 0.6, 0.3],
-          }}
+          animate={{ y: [0, 30, 0], opacity: [0.2, 0.5, 0.2] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"
+          className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl"
         />
         <motion.div
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.3, 0.6, 0.3],
-          }}
+          animate={{ y: [0, -30, 0], opacity: [0.2, 0.5, 0.2] }}
           transition={{ duration: 10, repeat: Infinity, delay: 1 }}
           className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"
         />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <span className="text-xs font-bold uppercase tracking-[0.3em] text-yellow-400/60">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#fbbf24] bg-[#fbbf24]/10 px-4 py-1.5 rounded-full mb-4 border border-[#fbbf24]/20"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#fbbf24]" />
             Hiliree Tutorials
-          </span>
-          <h2 className="text-5xl md:text-6xl font-serif text-white mt-3 mb-4">
+          </motion.span>
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 tracking-[-0.02em] font-['Cormorant_Garamond',serif]">
             Master Hiliree
           </h2>
-          <p className="text-white/40 max-w-xl mx-auto">
-            Learn how to build, connect, and share your family story with Hiliree
+          <p className="text-base text-white/40 max-w-xl mx-auto font-light">
+            Learn how to build, connect, and share your family story
           </p>
         </motion.div>
 
-        {/* Carousel */}
         <motion.div
-          ref={carouselRef}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           className="relative"
         >
-          {/* Cards Container */}
-          <div className="relative flex items-center justify-center gap-4 md:gap-6 mb-12">
-            {/* Left Navigation */}
+          <div className="relative flex items-center justify-center gap-4 md:gap-6 mb-8">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={handlePrev}
-              className="absolute left-0 z-20 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white/70 hover:text-white transition-all"
+              className="absolute left-0 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white/60 hover:text-white transition-all"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </motion.button>
 
-            {/* Carousel Cards */}
-            <div className="flex items-center justify-center gap-4 md:gap-6 w-full overflow-hidden px-16 md:px-20">
+            <div className="flex items-center justify-center gap-3 md:gap-4 w-full overflow-hidden px-14 md:px-16">
               <AnimatePresence mode="popLayout">
                 {visibleIndices.map((idx) => (
                   <CarouselCard
@@ -322,55 +281,50 @@ export function TrainingSection() {
               </AnimatePresence>
             </div>
 
-            {/* Right Navigation */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleNext}
-              className="absolute right-0 z-20 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white/70 hover:text-white transition-all"
+              className="absolute right-0 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white/60 hover:text-white transition-all"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5" />
             </motion.button>
           </div>
 
-          {/* Progress Indicators - Yellow bar when active, dots when inactive */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="flex gap-3 justify-center flex-wrap items-center"
+            className="flex gap-2 justify-center flex-wrap items-center"
           >
             {trainingVideos.map((video, idx) => (
               <motion.button
                 key={idx}
                 onClick={() => handleSelectCard(idx)}
                 animate={{
-                  width: idx === currentIndex ? 32 : 12,
-                  height: 12,
+                  width: idx === currentIndex ? 28 : 8,
+                  height: 8,
                   opacity: idx === currentIndex ? 1 : 0.4,
                 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 whileHover={{ opacity: 0.9 }}
                 className="rounded-full transition-all"
                 style={{
-                  background:
-                    idx === currentIndex ? "#FBBF24" : "rgba(251, 191, 36, 0.2)",
-                  boxShadow:
-                    idx === currentIndex ? `0 0 12px #FBBF24` : "none",
+                  background: idx === currentIndex ? video.color : `${video.color}40`,
+                  boxShadow: idx === currentIndex ? `0 0 10px ${video.color}60` : "none",
                 }}
               />
             ))}
           </motion.div>
 
-          {/* Instructions */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="text-center mt-8 text-white/40 text-sm"
+            className="text-center mt-6 text-white/30 text-xs font-light"
           >
-            <p>Click the arrows or indicators to navigate tutorials</p>
+            Click arrows or indicators to navigate tutorials
           </motion.div>
         </motion.div>
       </div>

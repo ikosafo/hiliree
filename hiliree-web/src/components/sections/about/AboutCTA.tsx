@@ -1,59 +1,105 @@
-﻿import Link from "next/link";
+﻿"use client";
+import { motion } from "framer-motion";
+import Link from "next/link";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function AboutCTA() {
   return (
-    <section className="relative py-32 lg:py-40 overflow-hidden bg-[#FFFBEB]">
-      {/* Editorial Background Elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.12]" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(65,48,126,0.03)_0%,transparent_70%)]" />
-      
-      {/* Subtle decorative orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-[#41307e]/3 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9D8FD1]/5 rounded-full blur-3xl pointer-events-none" />
+    <section
+      className="relative py-16 md:py-20 overflow-hidden"
+      style={{ background: "#FAFAF8" }}
+    >
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full blur-3xl pointer-events-none"
+        style={{ background: "rgba(23,17,61,0.03)" }}
+        animate={{ y: [0, 30, 0], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      <div className="relative max-w-[1400px] mx-auto px-8 z-10">
-        <div className="text-center max-w-3xl mx-auto">
-          {/* Small label */}
-          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-gray-400 mb-6">
-            <span className="w-1 h-1 rounded-full bg-gray-400" />
+      <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
+        {/* Pill badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: EASE }}
+        >
+          <span
+            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-3.5 py-1.5 rounded-full border font-poppins mb-5"
+            style={{
+              background: "linear-gradient(135deg, rgba(23,17,61,0.06) 0%, rgba(23,17,61,0.03) 100%)",
+              borderColor: "rgba(23,17,61,0.15)",
+              color: "#41307e",
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#41307e]" />
             Support Our Mission
           </span>
+        </motion.div>
 
-          {/* Main heading */}
-          <h2 className="font-serif text-[40px] lg:text-[48px] text-gray-900 leading-[1.08] mb-6">
-            Help us connect families across{" "}
-            <span className="italic font-light text-gray-400">generations</span>
-          </h2>
+        {/* Headline */}
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1, duration: 0.6, ease: EASE }}
+          className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-[-0.02em]"
+          style={{ color: "#2D206A" }}
+        >
+          Help us connect families across{" "}
+          <em className="font-light italic text-gray-400">generations</em>
+        </motion.h2>
 
-          {/* Description */}
-          <p className="text-[16px] text-gray-500 max-w-2xl mx-auto leading-relaxed mb-8 font-light">
-            Hiliree stands as a steady foundation, a place to honor where we come from and shape where we are going. In a world defined by change, we remain committed to helping families build, preserve, and share their legacy.
+        {/* Body */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.6, ease: EASE }}
+          className="max-w-xl mx-auto space-y-4 mb-10"
+        >
+          <p className="text-[15px] text-gray-500 leading-relaxed font-light">
+            In a world defined by change, Hiliree stands as a steady foundation, a place to honor 
+            where we come from and shape where we are going.
           </p>
-
-          {/* Secondary message */}
-          <p className="text-[15px] text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12 font-light">
-            Because the stories we craft today become the guiding lights for those who come after us. Join us as we help families strengthen their bonds and celebrate the ties that endure.
+          <p className="text-[14px] text-gray-400 leading-relaxed font-light">
+            Join us as we help families build, preserve, and share their legacy. Because the stories 
+            we craft today become the guiding lights for those who come after us.
           </p>
+        </motion.div>
 
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.6, ease: EASE }}
+          className="flex flex-col sm:flex-row gap-3 justify-center"
+        >
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
             <Link
               href="/donate"
-              className="group inline-flex items-center justify-center px-8 py-4 rounded-2xl text-sm font-semibold text-white bg-[#41307e] transition-all duration-500 hover:-translate-y-1 shadow-xl shadow-[#41307e]/10 hover:shadow-2xl hover:shadow-[#41307e]/20"
+              className="inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-sm font-semibold text-white min-w-[180px] font-poppins transition-all duration-300"
+              style={{ background: "#41307e" }}
             >
               Support Hiliree
-              <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
             </Link>
+          </motion.div>
 
+          <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
             <Link
               href="/contact"
-              className="group inline-flex items-center justify-center px-8 py-4 rounded-2xl text-sm font-semibold text-[#41307e] border border-[#41307e]/20 hover:border-[#41307e]/40 hover:bg-[#41307e]/5 transition-all duration-500 hover:-translate-y-1"
+              className="inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-sm font-semibold min-w-[180px] font-poppins transition-all duration-300"
+              style={{
+                color: "#41307e",
+                border: "1px solid rgba(65,48,126,0.25)",
+              }}
             >
               Get in Touch
-              <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

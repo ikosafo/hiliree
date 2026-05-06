@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { AboutHero } from "@/components/sections/about/AboutHero";
 import { AboutStory } from "@/components/sections/about/AboutStory";
-import { AboutValues } from "@/components/sections/about/AboutValues";
+import { AboutFeatures } from "@/components/sections/about/AboutFeatures";
 import { AboutCTA } from "@/components/sections/about/AboutCTA";
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export default function AboutPage() {
     <>
       <AboutHero />
       <AboutStory />
-      <AboutValues />
+      <AboutFeatures />
       <AboutCTA />
     </>
   );

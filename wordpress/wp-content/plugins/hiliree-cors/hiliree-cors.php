@@ -35,6 +35,16 @@ add_action('after_setup_theme', function() {
     ));
 });
 
+// Force WPGraphQL schema refresh on next request
+add_action('init', function() {
+    if (isset($_GET['flush_graphql'])) {
+        delete_option('graphql_general_settings');
+        flush_rewrite_rules();
+    }
+});
+
+
+
 function hiliree_site_settings_page() {
     ?>
     <div class="wrap">

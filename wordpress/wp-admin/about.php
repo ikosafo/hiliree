@@ -188,7 +188,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				<h3><?php _e( 'Visual drag and drop' ); ?></h3>
 				<p>
 					<strong><?php _e( 'Design flows naturally.' ); ?></strong><br />
-					<?php _e( 'Building layouts is now more intuitive and flexible with clear drag handles and a live preview that shows exactly what you&#8217;re moving—a faster way to build pages.' ); ?>
+					<?php _e( 'Building layouts is now more intuitive and flexible with clear drag handles and a live preview that shows exactly what you&#8217;re moving, a faster way to build pages.' ); ?>
 				</p>
 			</div>
 		</div>

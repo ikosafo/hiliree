@@ -1,7 +1,9 @@
-﻿"use client";
+﻿// hiliree-web\src\components\sections\DownloadSection.tsx
+"use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Star, Shield, ArrowDown } from "lucide-react";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
 export function DownloadSection() {
   return (
@@ -27,10 +29,16 @@ export function DownloadSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#6366f1] bg-[#6366f1]/8 px-4 py-1.5 rounded-full mb-6 border border-[#6366f1]/15"
+            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-4 py-1.5 rounded-full mb-6 border"
+            style={{
+              color: COLORS.brand[5],
+              backgroundColor: `${COLORS.brand[5]}15`,
+              borderColor: `${COLORS.brand[5]}25`,
+            }}
           >
             <motion.span
-              className="w-1.5 h-1.5 rounded-full bg-[#6366f1]"
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: COLORS.brand[5] }}
               animate={{ scale: [1, 1.3, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
@@ -43,7 +51,8 @@ export function DownloadSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-['Cormorant_Garamond',serif] text-[38px] md:text-[48px] font-bold text-[#1a1530] mb-4 leading-[1.1] tracking-[-0.02em]"
+            className="font-['Cormorant_Garamond',serif] text-[38px] md:text-[48px] font-bold mb-4 leading-[1.1] tracking-[-0.02em]"
+            style={{ color: COLORS.brand[6] }}
           >
             Start building your<br />family&apos;s legacy today
           </motion.h2>
@@ -53,7 +62,8 @@ export function DownloadSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-[14px] text-[#6b6488] max-w-sm mx-auto font-light mb-8"
+            className="text-[14px] max-w-sm mx-auto font-light mb-8"
+            style={{ color: COLORS.brand[4] }}
           >
             Free to download. Private by design. Built to last generations.
           </motion.p>
@@ -66,22 +76,22 @@ export function DownloadSection() {
             transition={{ delay: 0.3 }}
             className="flex flex-wrap items-center justify-center gap-4 mb-10"
           >
-            <div className="flex items-center gap-1.5 text-[#6b6488]">
-              <Shield size={12} className="text-emerald-500" />
+            <div className="flex items-center gap-1.5" style={{ color: COLORS.brand[4] }}>
+              <Shield size={12} style={{ color: COLORS.success[5] }} />
               <span className="text-[10px] font-medium">Private & Secure</span>
             </div>
-            <div className="w-1 h-1 rounded-full bg-[#DDDAE8]" />
-            <div className="flex items-center gap-1 text-[#6b6488]">
+            <div className="w-1 h-1 rounded-full" style={{ background: COLORS.brand[3] }} />
+            <div className="flex items-center gap-1" style={{ color: COLORS.brand[4] }}>
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={10} className="text-amber-500" fill="currentColor" />
+                  <Star key={i} size={10} style={{ color: COLORS.gold[6] }} fill="currentColor" />
                 ))}
               </div>
               <span className="text-[10px] font-medium">4.9 on App store</span>
             </div>
-            <div className="w-1 h-1 rounded-full bg-[#DDDAE8]" />
-            <div className="flex items-center gap-1.5 text-[#6b6488]">
-              <ArrowDown size={12} className="text-[#6366f1]" />
+            <div className="w-1 h-1 rounded-full" style={{ background: COLORS.brand[3] }} />
+            <div className="flex items-center gap-1.5" style={{ color: COLORS.brand[4] }}>
+              <ArrowDown size={12} style={{ color: COLORS.brand[5] }} />
               <span className="text-[10px] font-medium">Free Download</span>
             </div>
           </motion.div>
@@ -106,7 +116,7 @@ export function DownloadSection() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 px-5 py-2.5 rounded-xl transition-all duration-300 min-w-[160px]"
                 style={{
-                  background: "linear-gradient(145deg, #2C2C2E 0%, #1C1C1E 100%)",
+                  background: `linear-gradient(145deg, ${COLORS.brand[6]} 0%, ${COLORS.brand[6]} 100%)`,
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                   border: "1px solid rgba(255,255,255,0.08)"
                 }}
@@ -137,7 +147,7 @@ export function DownloadSection() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 px-5 py-2.5 rounded-xl transition-all duration-300 min-w-[160px]"
                 style={{
-                  background: "linear-gradient(145deg, #2C2C2E 0%, #1C1C1E 100%)",
+                  background: `linear-gradient(145deg, ${COLORS.brand[6]} 0%, ${COLORS.brand[6]} 100%)`,
                   borderColor: "rgba(255,255,255,0.08)",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                   border: "1px solid rgba(255,255,255,0.08)"
@@ -164,7 +174,8 @@ export function DownloadSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.6 }}
-            className="mt-12 text-[10px] uppercase tracking-[0.2em] text-[#9b96b5] font-medium"
+            className="mt-12 text-[10px] uppercase tracking-[0.2em] font-medium"
+            style={{ color: COLORS.brand[4] }}
           >
             Join thousands of families
           </motion.p>

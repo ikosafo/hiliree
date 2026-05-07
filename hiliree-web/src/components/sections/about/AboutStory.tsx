@@ -1,6 +1,8 @@
-﻿"use client";
+﻿// hiliree-web\src\components\sections\about\AboutStory.tsx
+"use client";
 import { motion } from "framer-motion";
 import { MessageCircle, Users, Trees } from "lucide-react";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -9,19 +11,25 @@ const nameElements = [
     letter: "Hi",
     meaning: "The greeting that opens every path",
     icon: MessageCircle,
-    color: "#6366f1",
+    color: COLORS.cyan[6],      // #0FC6C2 (bright teal)
+    bgColor: COLORS.cyan[1],
+    borderColor: COLORS.cyan[3],
   },
   {
     letter: "Family",
     meaning: "The circle that shapes our earliest foundations",
     icon: Users,
-    color: "#7c3aed",
+    color: COLORS.brand[4],      // #9B88CA (lighter purple)
+    bgColor: COLORS.brand[1],
+    borderColor: COLORS.brand[3],
   },
   {
     letter: "Tree",
     meaning: "A timeless symbol of roots, growth, and generational strength",
     icon: Trees,
-    color: "#d946ef",
+    color: COLORS.magenta[6],    // #F5319D (vibrant pink)
+    bgColor: COLORS.magenta[1],
+    borderColor: COLORS.magenta[3],
   },
 ];
 
@@ -29,17 +37,17 @@ const pillars = [
   {
     title: "Wisdom",
     description: "That lights our path",
-    color: "#6366f1",
+    color: COLORS.cyan[6],
   },
   {
     title: "Support",
     description: "That steadies us",
-    color: "#7c3aed",
+    color: COLORS.brand[4],
   },
   {
     title: "Lineage",
     description: "That connects us across time and distance",
-    color: "#d946ef",
+    color: COLORS.magenta[6],
   },
 ];
 
@@ -54,13 +62,13 @@ export function AboutStory() {
         <div
           className="absolute inset-0 opacity-[0.015] pointer-events-none"
           style={{
-            backgroundImage: "radial-gradient(circle, #6366f1 1px, transparent 1px)",
+            backgroundImage: `radial-gradient(circle, ${COLORS.cyan[6]} 1px, transparent 1px)`,
             backgroundSize: "50px 50px",
           }}
         />
         <motion.div
           className="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none"
-          style={{ background: "rgba(99,102,241,0.06)" }}
+          style={{ background: `${COLORS.cyan[6]}15` }}
           animate={{ y: [0, 30, 0], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -74,13 +82,20 @@ export function AboutStory() {
             transition={{ duration: 0.6, ease: EASE }}
             className="text-center mb-12"
           >
-            <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#a5b4fc] bg-[#6366f1]/10 px-3.5 py-1.5 rounded-full border border-[#6366f1]/20 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#818cf8]" />
+            <span
+              className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-3.5 py-1.5 rounded-full border mb-5"
+              style={{
+                color: COLORS.cyan[5],
+                backgroundColor: `${COLORS.cyan[6]}25`,
+                borderColor: `${COLORS.cyan[5]}50`,
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: COLORS.cyan[5] }} />
               Our Story
             </span>
-            <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-[-0.02em]">
+            <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold tracking-[-0.02em]" style={{ color: COLORS.text[5] }}>
               A welcoming bridge between{" "}
-              <em className="font-light italic text-white/40">past, present, and future</em>
+              <em className="font-light italic" style={{ color: `${COLORS.text[5]}66` }}>past, present, and future</em>
             </h2>
           </motion.div>
 
@@ -98,15 +113,28 @@ export function AboutStory() {
                   className="text-center group"
                 >
                   <div
-                    className="w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                    style={{ background: `${item.color}10`, border: `1px solid ${item.color}20` }}
+                    className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                    style={{
+                      background: `${item.color}25`,
+                      border: `2px solid ${item.color}50`,
+                      boxShadow: `0 0 20px ${item.color}15`,
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 30px ${item.color}40`;
+                      e.currentTarget.style.borderColor = item.color;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 20px ${item.color}15`;
+                      e.currentTarget.style.borderColor = `${item.color}50`;
+                    }}
                   >
-                    <Icon className="w-6 h-6" style={{ color: item.color }} strokeWidth={1.5} />
+                    <Icon className="w-7 h-7" style={{ color: item.color }} strokeWidth={1.5} />
                   </div>
                   <div className="text-3xl font-['Cormorant_Garamond',serif] font-bold mb-2" style={{ color: item.color }}>
                     {item.letter}
                   </div>
-                  <p className="text-[13px] text-white/35 leading-relaxed font-light max-w-[200px] mx-auto">
+                  <p className="text-[13px] leading-relaxed font-light max-w-[200px] mx-auto" style={{ color: `${COLORS.text[5]}66` }}>
                     {item.meaning}
                   </p>
                 </motion.div>
@@ -122,14 +150,11 @@ export function AboutStory() {
             transition={{ delay: 0.2, duration: 0.6, ease: EASE }}
             className="max-w-2xl mx-auto text-center"
           >
-            <p className="text-[15px] text-white/40 leading-relaxed font-light mb-4">
-              Together, they form a welcoming bridge between past, present, and future — names that reflect our commitment 
+            <p className="text-[15px] leading-relaxed font-light mb-4" style={{ color: `${COLORS.text[5]}66` }}>
+              Together, they form a welcoming bridge between past, present, and future names that reflect our commitment 
               to helping families greet their history with clarity, honor, and purpose.
             </p>
-            <p className="text-[14px] text-white/25 leading-relaxed font-light">
-              Built on the pillars of connection, continuity, and collective memory, Hiliree exists to strengthen 
-              the bonds that guide us, ground us, and shape the generations that follow.
-            </p>
+            
           </motion.div>
         </div>
       </section>
@@ -137,7 +162,7 @@ export function AboutStory() {
       {/* Our Foundation — Light (for contrast) */}
       <section
         className="relative py-16 md:py-20 overflow-hidden"
-        style={{ background: "#FAFAF8" }}
+        style={{ background: COLORS.fill[2] }}
       >
         <div className="max-w-5xl mx-auto px-6 relative z-10">
           {/* Header */}
@@ -148,15 +173,22 @@ export function AboutStory() {
             transition={{ duration: 0.6, ease: EASE }}
             className="text-center mb-14"
           >
-            <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-indigo-300 bg-indigo-500/10 px-3.5 py-1.5 rounded-full border border-indigo-500/20 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+            <span
+              className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-3.5 py-1.5 rounded-full border mb-5"
+              style={{
+                color: COLORS.brand[6],
+                backgroundColor: `${COLORS.brand[5]}20`,
+                borderColor: `${COLORS.brand[5]}50`,
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: COLORS.brand[5] }} />
               Our Foundation
             </span>
-            <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold tracking-[-0.02em] mb-4" style={{ color: "#2D206A" }}>
+            <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold tracking-[-0.02em] mb-4" style={{ color: COLORS.brand[6] }}>
               Family stories are the first blueprints of{" "}
-              <em className="font-light italic text-gray-400">who we become</em>
+              <em className="font-light italic" style={{ color: COLORS.text[2] }}>who we become</em>
             </h2>
-            <p className="text-[15px] text-gray-500 max-w-lg mx-auto leading-relaxed font-light">
+            <p className="text-[15px] max-w-lg mx-auto leading-relaxed font-light" style={{ color: COLORS.text[2] }}>
               Behind Hiliree is a deep understanding that through seasons of growth and challenge, 
               relationships, when nurtured,form the strongest roots.
             </p>
@@ -183,7 +215,7 @@ export function AboutStory() {
                 >
                   {item.title}
                 </h3>
-                <p className="text-[13px] text-gray-500 font-light leading-relaxed">
+                <p className="text-[13px] font-light leading-relaxed" style={{ color: COLORS.text[2] }}>
                   {item.description}
                 </p>
               </motion.div>
@@ -196,7 +228,8 @@ export function AboutStory() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-center text-gray-400 text-[12px] mt-12 font-light italic"
+            className="text-center text-[12px] mt-12 font-light italic"
+            style={{ color: COLORS.text[2] }}
           >
             These values serve as the quiet architecture behind every feature we build.
           </motion.p>

@@ -1,29 +1,20 @@
-﻿// hiliree-web\src\components\sections\donate\DonationHero.tsx
 "use client";
 import { motion } from "framer-motion";
-import { COLORS } from "@/components/common/ColorGuidePage";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-export function DonationHero() {
+export function FAQHero() {
   return (
     <section
       className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: `linear-gradient(155deg, #FAFAF8 0%, #F2EDE6 55%, ${COLORS.brand[6]}08 100%)` }}
+      style={{ background: "linear-gradient(155deg, #FAFAF8 0%, #F2EDE6 55%, rgba(23,17,61,0.03) 100%)" }}
     >
       <motion.div
         className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none"
-        style={{ background: `${COLORS.brand[6]}0A` }}
+        style={{ background: "rgba(23,17,61,0.04)" }}
         animate={{ y: [0, 30, 0], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
-      <motion.div
-        className="absolute -bottom-24 -left-24 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none"
-        style={{ background: `${COLORS.orangeRed[1]}80` }}
-        animate={{ y: [0, -30, 0], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      />
-
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
@@ -41,18 +32,17 @@ export function DonationHero() {
           <span
             className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-3.5 py-1.5 rounded-full border font-poppins"
             style={{
-              background: `linear-gradient(135deg, ${COLORS.brand[6]}0F 0%, ${COLORS.brand[6]}08 100%)`,
-              borderColor: `${COLORS.brand[6]}26`,
-              color: COLORS.brand[5],
+              background: "linear-gradient(135deg, rgba(23,17,61,0.06) 0%, rgba(23,17,61,0.03) 100%)",
+              borderColor: "rgba(23,17,61,0.15)",
+              color: "#41307e",
             }}
           >
             <motion.span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: COLORS.brand[5] }}
+              className="w-1.5 h-1.5 rounded-full bg-[#41307e]"
               animate={{ scale: [1, 1.5, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            Support Hiliree
+            Help Center
           </span>
         </motion.div>
 
@@ -60,21 +50,19 @@ export function DonationHero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12, duration: 0.7, ease: EASE }}
-          className="font-['Cormorant_Garamond',serif] text-4xl md:text-5xl lg:text-6xl font-bold mt-6 mb-6 tracking-[-0.02em]"
-          style={{ color: COLORS.brand[6] }}
+          className="font-['Cormorant_Garamond',serif] text-4xl md:text-5xl lg:text-6xl font-bold mt-6 mb-4 tracking-[-0.02em]"
+          style={{ color: "#2D206A" }}
         >
-          Help us connect families across{" "}
-          <em className="font-light italic" style={{ color: COLORS.blue[7] }}>generations</em>
+          Hiliree FAQ
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.24, duration: 0.7, ease: EASE }}
-          className="text-[16px] leading-relaxed max-w-lg mx-auto font-poppins font-light"
-          style={{ color: COLORS.text[2] }}
+          transition={{ delay: 0.2, duration: 0.7, ease: EASE }}
+          className="text-[15px] text-gray-500 leading-relaxed max-w-lg mx-auto font-poppins font-light"
         >
-          Together, we build the future of family connection
+          Everything you need to know about building your family tree, connecting with relatives, and preserving your legacy.
         </motion.p>
       </div>
     </section>

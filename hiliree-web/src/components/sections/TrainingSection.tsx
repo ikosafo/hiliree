@@ -2,6 +2,7 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
 const trainingVideos = [
   {
@@ -10,7 +11,7 @@ const trainingVideos = [
     description: "Get started with your family journey in minutes",
     embedUrl: "https://www.youtube.com/embed/fstMlzz5QH8",
     thumbnail: "https://images.pexels.com/photos/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    color: "#6366f1",
+    color: COLORS.blue[7],
   },
   {
     id: 2,
@@ -18,7 +19,7 @@ const trainingVideos = [
     description: "Create your family tree from the ground up",
     embedUrl: "https://www.youtube.com/embed/a-K3grP8g4g",
     thumbnail: "https://images.pexels.com/photos/2253879/pexels-photo-2253879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    color: "#a78bfa",
+    color: COLORS.brand[3],
   },
   {
     id: 3,
@@ -26,7 +27,7 @@ const trainingVideos = [
     description: "Add relatives and grow your family connections",
     embedUrl: "https://www.youtube.com/embed/vGO7RFiPYFY",
     thumbnail: "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    color: "#e879f9",
+    color: COLORS.brand[5],
   },
   {
     id: 4,
@@ -34,7 +35,7 @@ const trainingVideos = [
     description: "Explore messaging, privacy tools, and more",
     embedUrl: "https://www.youtube.com/embed/qs_q7GlIZ9s",
     thumbnail: "https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    color: "#fbbf24",
+    color: COLORS.gold[6],
   },
   {
     id: 5,
@@ -42,7 +43,7 @@ const trainingVideos = [
     description: "Share memories and celebrate family milestones",
     embedUrl: "https://www.youtube.com/embed/h0SqEnMOF58",
     thumbnail: "https://images.pexels.com/photos/3171837/pexels-photo-3171837.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    color: "#34d399",
+    color: COLORS.success[6],
   },
 ];
 
@@ -111,7 +112,7 @@ function CarouselCard({
                     boxShadow: `0 0 20px ${video.color}60`,
                   }}
                 >
-                  <Play className="w-6 h-6 text-white fill-white ml-1" />
+                  <Play className="w-6 h-6 fill-white ml-1" style={{ color: COLORS.text[5] }} />
                 </motion.div>
               </div>
             </>
@@ -135,14 +136,15 @@ function CarouselCard({
               Tutorial {index + 1} of {totalItems}
             </span>
           </div>
-          <h3 className="text-lg md:text-xl font-bold text-white mb-0.5">
+          <h3 className="text-lg md:text-xl font-bold mb-0.5" style={{ color: COLORS.text[5] }}>
             {video.title}
           </h3>
           {isCenter && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-xs text-white/60"
+              className="text-xs"
+              style={{ color: `${COLORS.text[5]}99` }}
             >
               {video.description}
             </motion.p>
@@ -215,12 +217,14 @@ export function TrainingSection() {
         <motion.div
           animate={{ y: [0, 30, 0], opacity: [0.2, 0.5, 0.2] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl"
+          className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: `${COLORS.blue[6]}33` }}
         />
         <motion.div
           animate={{ y: [0, -30, 0], opacity: [0.2, 0.5, 0.2] }}
           transition={{ duration: 10, repeat: Infinity, delay: 1 }}
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"
+          className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl"
+          style={{ background: `${COLORS.brand[5]}33` }}
         />
       </div>
 
@@ -236,15 +240,20 @@ export function TrainingSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#fbbf24] bg-[#fbbf24]/10 px-4 py-1.5 rounded-full mb-4 border border-[#fbbf24]/20"
+            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-4 py-1.5 rounded-full mb-4 border"
+            style={{
+              color: COLORS.text[5],
+              backgroundColor: `${COLORS.gold[6]}1a`,
+              borderColor: `${COLORS.gold[6]}33`,
+            }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#fbbf24]" />
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: COLORS.text[5] }} />
             Hiliree Tutorials
           </motion.span>
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 tracking-[-0.02em] font-['Cormorant_Garamond',serif]">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 tracking-[-0.02em] font-['Cormorant_Garamond',serif]" style={{ color: COLORS.text[5] }}>
             Master Hiliree
           </h2>
-          <p className="text-base text-white/40 max-w-xl mx-auto font-light">
+          <p className="text-base max-w-xl mx-auto font-light" style={{ color: `${COLORS.text[5]}66` }}>
             Learn how to build, connect, and share your family story
           </p>
         </motion.div>
@@ -261,7 +270,12 @@ export function TrainingSection() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={handlePrev}
-              className="absolute left-0 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white/60 hover:text-white transition-all"
+              className="absolute left-0 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all border"
+              style={{
+                background: `${COLORS.text[5]}1a`,
+                borderColor: `${COLORS.text[5]}26`,
+                color: `${COLORS.text[5]}99`,
+              }}
             >
               <ChevronLeft className="w-5 h-5" />
             </motion.button>
@@ -285,7 +299,12 @@ export function TrainingSection() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleNext}
-              className="absolute right-0 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white/60 hover:text-white transition-all"
+              className="absolute right-0 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all border"
+              style={{
+                background: `${COLORS.text[5]}1a`,
+                borderColor: `${COLORS.text[5]}26`,
+                color: `${COLORS.text[5]}99`,
+              }}
             >
               <ChevronRight className="w-5 h-5" />
             </motion.button>
@@ -322,7 +341,8 @@ export function TrainingSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="text-center mt-6 text-white/30 text-xs font-light"
+            className="text-center mt-6 text-xs font-light"
+            style={{ color: `${COLORS.text[5]}4d` }}
           >
             Click arrows or indicators to navigate tutorials
           </motion.div>

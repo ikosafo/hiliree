@@ -1,12 +1,8 @@
-﻿// hiliree-web\src\components\layout\LegalPageLayout.tsx
-"use client";
-import { useEffect, useState, ReactNode, useRef } from "react";
+﻿"use client";
+import { useEffect, useState, ReactNode } from "react";
+import { motion } from "framer-motion";
 import { BookOpen, ArrowUp, Scale } from "lucide-react";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 
-/* ─────────────────────────────────────────────
-   Types
-───────────────────────────────────────────── */
 export type LegalSection = { id: string; label: string };
 
 interface LegalPageLayoutProps {
@@ -16,36 +12,6 @@ interface LegalPageLayoutProps {
   children: ReactNode;
 }
 
-/* ─────────────────────────────────────────────
-   Reading progress bar
-───────────────────────────────────────────── */
-function ReadingProgress() {
-  const { scrollYProgress } = useScroll();
-  const [pct, setPct] = useState(0);
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setPct(latest * 100);
-  });
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="fixed top-0 inset-x-0 z-[70] h-px bg-transparent pointer-events-none"
-    >
-      <motion.div
-        className="h-full bg-gradient-to-r from-gray-900 to-gray-600"
-        style={{
-          width: `${pct}%`,
-        }}
-      />
-    </motion.div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Sticky sidebar navigation - scrolls with content
-───────────────────────────────────────────── */
 function SidebarNav({ sections }: { sections: LegalSection[] }) {
   const [activeId, setActiveId] = useState<string>("");
 
@@ -53,9 +19,7 @@ function SidebarNav({ sections }: { sections: LegalSection[] }) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveId(entry.target.id);
         });
       },
       { rootMargin: "-20% 0px -70% 0px", threshold: 0 }
@@ -77,67 +41,50 @@ function SidebarNav({ sections }: { sections: LegalSection[] }) {
   };
 
   return (
-    <div className="sticky top-24 flex flex-col h-[calc(100vh-96px)]">
-      {/* Header */}
-      <div className="flex items-center gap-2.5 mb-6 pb-5 border-b border-gray-200 flex-shrink-0">
-        <div className="w-7 h-7 rounded-lg bg-gray-900/5 flex items-center justify-center">
-          <BookOpen size={13} className="text-gray-900" strokeWidth={1.5} />
-        </div>
-        <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
-          Sections
-        </span>
+    <div className="sticky top-24">
+      <div className="flex items-center gap-2 mb-5">
+        <BookOpen size={13} className="text-gray-400" strokeWidth={1.5} />
+        <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400">On this page</span>
       </div>
-
-      {/* Scrollable Navigation */}
-      <nav className="space-y-0.5 overflow-y-auto flex-1 pr-2">
-        {sections.map((s) => {
-          const isActive = activeId === s.id;
-          return (
-            <button
-              key={s.id}
-              onClick={() => scrollTo(s.id)}
-              className={`group w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-gray-900 text-white font-medium"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              {s.label}
-            </button>
-          );
-        })}
+      <nav className="space-y-0.5">
+        {sections.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => scrollTo(s.id)}
+            className={`block w-full text-left px-3 py-2 rounded-lg text-[12px] transition-colors ${
+              activeId === s.id
+                ? "bg-[#41307e]/5 text-[#41307e] font-medium"
+                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
       </nav>
-
-      {/* Back to top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="mt-6 text-xs font-medium text-gray-400 hover:text-gray-900 flex items-center gap-2 group transition-colors flex-shrink-0"
+        className="mt-5 text-[11px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors"
       >
-        <ArrowUp size={14} className="group-hover:-translate-y-0.5 transition-transform" />
-        Top
+        <ArrowUp size={12} />
+        Back to top
       </button>
     </div>
   );
 }
 
-/* ─────────────────────────────────────────────
-   Mobile TOC
-───────────────────────────────────────────── */
 function MobileTOC({ sections }: { sections: LegalSection[] }) {
   return (
-    <div className="lg:hidden mb-12 p-6 rounded-xl bg-white border border-gray-200">
-      <div className="flex items-center gap-2 mb-4">
-        <Scale size={14} className="text-gray-900" strokeWidth={1.5} />
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500">
-          Table of Contents
-        </p>
+    <div className="lg:hidden mb-10 p-5 rounded-xl bg-white border border-gray-100">
+      <div className="flex items-center gap-2 mb-3">
+        <Scale size={13} className="text-gray-400" strokeWidth={1.5} />
+        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400">On this page</p>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         {sections.map((s) => (
           <a
             key={s.id}
             href={`#${s.id}`}
-            className="text-xs font-medium px-3 py-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-900 hover:text-white transition-colors duration-200"
+            className="text-[11px] font-medium px-3 py-1.5 rounded-lg bg-gray-50 text-gray-600 hover:bg-[#41307e]/5 hover:text-[#41307e] transition-colors"
           >
             {s.label}
           </a>
@@ -147,142 +94,103 @@ function MobileTOC({ sections }: { sections: LegalSection[] }) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   Main layout
-───────────────────────────────────────────── */
-export function LegalPageLayout({
-  title,
-  lastUpdated,
-  sections,
-  children,
-}: LegalPageLayoutProps) {
+export function LegalPageLayout({ title, lastUpdated, sections, children }: LegalPageLayoutProps) {
   return (
-    <>
-      <ReadingProgress />
+    <main className="min-h-screen pt-20 bg-white">
+      <div className="max-w-5xl mx-auto px-6 py-12 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-400 font-poppins">
+            Legal Document
+          </span>
+          <h1 className="font-['Cormorant_Garamond',serif] text-3xl lg:text-4xl font-bold mt-3 mb-3 tracking-[-0.02em]" style={{ color: "#2D206A" }}>
+            {title}
+          </h1>
+          <p className="text-[12px] text-gray-400 font-poppins">
+            Last updated <span className="font-medium text-gray-500">{lastUpdated}</span>
+          </p>
+        </motion.div>
+      </div>
 
-      <main className="min-h-screen pt-20 bg-white">
-        <div className="section-wrapper py-12 lg:py-16 relative">
-          <div className="grid lg:grid-cols-[220px_1fr] gap-12 lg:gap-16 max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-6 py-12">
+        <div className="grid lg:grid-cols-[200px_1fr] gap-10">
+          <aside className="hidden lg:block">
+            <SidebarNav sections={sections} />
+          </aside>
 
-            {/* Sidebar */}
-            <aside className="hidden lg:block">
-              <SidebarNav sections={sections} />
-            </aside>
+          <article className="min-w-0">
+            <MobileTOC sections={sections} />
 
-            {/* Article */}
-            <article className="min-w-0">
-              {/* Title block */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="mb-12"
-              >
-                {/* Badge */}
-                <div className="flex items-center gap-2 mb-5">
-                  <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
-                    Legal Document
-                  </span>
-                  <div className="flex-1 h-px bg-gradient-to-r from-gray-300 to-transparent" />
-                </div>
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="
+                [&_section]:scroll-mt-24
+                [&_section]:mb-12
 
-                {/* Title */}
-                <h1 className="font-serif text-4xl lg:text-5xl leading-tight text-gray-900 mb-6">
-                  {title}
-                </h1>
+                [&_h2]:font-['Cormorant_Garamond',serif]
+                [&_h2]:text-xl
+                [&_h2]:lg:text-2xl
+                [&_h2]:font-bold
+                [&_h2]:text-gray-900
+                [&_h2]:mb-4
 
-                {/* Metadata */}
-                <div className="text-sm text-gray-500">
-                  Last updated <span className="font-semibold text-gray-700">{lastUpdated}</span>
-                </div>
-              </motion.div>
+                [&_h3]:text-[14px]
+                [&_h3]:font-semibold
+                [&_h3]:text-gray-800
+                [&_h3]:mb-3
+                [&_h3]:mt-7
 
-              {/* Divider */}
-              <div className="mb-12 h-px bg-gray-200" />
+                [&_p]:text-[13px]
+                [&_p]:text-gray-600
+                [&_p]:leading-[1.75]
+                [&_p]:mb-4
 
-              {/* Mobile TOC */}
-              <MobileTOC sections={sections} />
+                [&_ul]:space-y-2
+                [&_ul]:mb-5
+                [&_ul]:list-none
 
-              {/* Content */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1, duration: 0.6 }}
-                className="
-                  [&_section]:scroll-mt-20
-                  [&_section]:mb-14
+                [&_li]:text-[13px]
+                [&_li]:text-gray-600
+                [&_li]:leading-relaxed
+                [&_li]:pl-4
+                [&_li]:relative
 
-                  [&_h2]:font-serif
-                  [&_h2]:text-2xl
-                  [&_h2]:lg:text-3xl
-                  [&_h2]:text-gray-900
-                  [&_h2]:leading-tight
-                  [&_h2]:mb-6
-                  [&_h2]:pb-4
-                  [&_h2]:border-b
-                  [&_h2]:border-gray-200
+                [&_li::before]:content-['']
+                [&_li::before]:absolute
+                [&_li::before]:left-0
+                [&_li::before]:top-[9px]
+                [&_li::before]:w-1
+                [&_li::before]:h-1
+                [&_li::before]:rounded-full
+                [&_li::before]:bg-gray-300
 
-                  [&_h3]:text-base
-                  [&_h3]:font-semibold
-                  [&_h3]:text-gray-900
-                  [&_h3]:mb-4
-                  [&_h3]:mt-8
+                [&_strong]:text-gray-900
+                [&_strong]:font-semibold
 
-                  [&_p]:text-base
-                  [&_p]:text-gray-600
-                  [&_p]:leading-[1.8]
-                  [&_p]:mb-5
+                [&_a]:text-[#41307e]
+                [&_a]:font-medium
+                [&_a]:hover:underline
+              "
+            >
+              {children}
+            </motion.div>
 
-                  [&_p:first-of-type]:text-lg
-                  [&_p:first-of-type]:text-gray-700
-
-                  [&_ul]:space-y-3
-                  [&_ul]:mb-6
-                  [&_ul]:pl-0
-                  [&_ul]:list-none
-
-                  [&_li]:relative
-                  [&_li]:flex
-                  [&_li]:items-start
-                  [&_li]:gap-3
-                  [&_li]:text-base
-                  [&_li]:text-gray-600
-                  [&_li]:leading-relaxed
-
-                  [&_strong]:text-gray-900
-                  [&_strong]:font-semibold
-
-                  [&_a]:text-gray-900
-                  [&_a]:font-medium
-                  [&_a]:underline
-                  [&_a]:underline-offset-2
-                  [&_a]:decoration-gray-300
-                  [&_a:hover]:decoration-gray-900
-                  [&_a]:transition-colors
-                  [&_a]:duration-200
-                "
-              >
-                {children}
-              </motion.div>
-
-              {/* Footer */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="mt-16 pt-10 border-t border-gray-200"
-              >
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  If you have any questions about this document, please contact us at{" "}
-                  <a href="mailto:support@hiliree.com" className="text-gray-900 font-medium hover:underline">
-                    support@hiliree.com
-                  </a>
-                </p>
-              </motion.div>
-            </article>
-          </div>
+            <div className="mt-14 pt-8 border-t border-gray-100">
+              <p className="text-[12px] text-gray-500 leading-relaxed">
+                If you have any questions about this document, please contact us at{" "}
+                <a href="mailto:support@hiliree.com" className="text-[#41307e] font-medium hover:underline">
+                  support@hiliree.com
+                </a>
+              </p>
+            </div>
+          </article>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

@@ -1,107 +1,221 @@
-﻿"use client";
-import { motion } from "framer-motion";
-import { Shield, Info, Lock } from "lucide-react";
+﻿// hiliree-web\src\components\sections\donate\DonationInfo.tsx
+"use client";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, Wand2, Shield, Zap } from "lucide-react";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
-const infoItems = [
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const impactItems = [
+  {
+    icon: Sparkles,
+    title: "Enhance the Hiliree Experience",
+    description: "Improve core features like the family tree, profiles, memories, and communication tools to make Hiliree more intuitive and powerful.",
+    color: COLORS.blue[6],
+    iconBg: COLORS.blue[1],
+  },
+  {
+    icon: Wand2,
+    title: "Build New Features",
+    description: "Bring to life future upgrades, generational visualization, shared memory timelines, and richer ways for families to interact.",
+    color: COLORS.brand[7],
+    iconBg: COLORS.brand[1],
+  },
   {
     icon: Shield,
-    title: "Secure Payment",
-    description: "All donations processed through Stripe with bank-level encryption.",
+    title: "Prioritize Safety & Privacy",
+    description: "Invest in strong privacy protections, secure data handling, and responsible design so families can use Hiliree with confidence.",
+    color: COLORS.magenta[6],
+    iconBg: COLORS.magenta[1],
   },
   {
-    icon: Info,
-    title: "Transparent",
-    description: "100% of donations go toward development and operations.",
-  },
-  {
-    icon: Lock,
-    title: "No Strings",
-    description: "Cancel anytime. Your support is appreciated but never required.",
+    icon: Zap,
+    title: "Keep Hiliree Running Smoothly",
+    description: "Support ongoing platform stability, fast loading, reliable performance, and seamless experience for families around the globe.",
+    color: COLORS.gold[6],
+    iconBg: COLORS.gold[1],
   },
 ];
 
-export function DonationInfo() {
+const TOTAL = impactItems.length;
+
+export function DonationWhy() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const goNext = useCallback(() => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % TOTAL);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + TOTAL) % TOTAL);
+  }, []);
+
+  const goTo = useCallback((idx: number) => {
+    setDirection(idx > currentIndex ? 1 : -1);
+    setCurrentIndex(idx);
+  }, [currentIndex]);
+
+  const getSlide = (offset: number) => {
+    return impactItems[(currentIndex + offset + TOTAL) % TOTAL];
+  };
+
   return (
-    <section className="relative py-32 lg:py-40 overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?w=1920&q=80&auto=format&fit=crop')`,
-          }}
-        />
-        {/* Multiple overlay layers for depth and readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#41307e]/95 via-[#41307e]/90 to-[#2D1F5E]/95" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.06)_0%,transparent_50%)]" />
-        {/* Subtle grain texture */}
-        <div 
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          }}
-        />
-      </div>
+    <section
+      className="relative py-16 md:py-20 overflow-hidden"
+      style={{ background: "linear-gradient(180deg, #1A1A28 0%, #1E1E30 50%, #252540 100%)" }}
+    >
+      <div
+        className="absolute inset-0 opacity-[0.015] pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(circle, ${COLORS.blue[6]} 1px, transparent 1px)`,
+          backgroundSize: "50px 50px",
+        }}
+      />
+      <motion.div
+        className="absolute -top-40 right-0 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none"
+        style={{ background: `${COLORS.blue[6]}0D` }}
+        animate={{ y: [0, 40, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      {/* Decorative floating orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9D8FD1]/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#6C5CE7]/5 rounded-full blur-[150px] pointer-events-none" />
-
-      {/* Top divider */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
-      {/* Bottom divider */}
-      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
-
-      <div className="section-wrapper max-w-4xl mx-auto relative z-10 px-8">
+      <div className="max-w-5xl mx-auto px-6 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6, ease: EASE }}
+          className="text-center mb-14"
         >
-          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#9D8FD1] mb-6">
-            <span className="w-1 h-1 rounded-full bg-[#9D8FD1]" />
-            Your Trust Matters
+          <span
+            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-3.5 py-1.5 rounded-full border mb-5"
+            style={{
+              color: COLORS.blue[3],
+              backgroundColor: `${COLORS.blue[6]}1A`,
+              borderColor: `${COLORS.blue[6]}33`,
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: COLORS.blue[5] }} />
+            Why Your Support Matters
           </span>
-          <h2 className="font-serif text-[40px] lg:text-[48px] leading-[1.08] text-white">
-            We take your support{" "}
-            <span className="italic font-light text-white/60">seriously</span>
+          <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold tracking-[-0.02em]" style={{ color: COLORS.text[5] }}>
+            Your contribution does <em className="font-light italic" style={{ color: `${COLORS.text[5]}66` }}>more than fund an app</em>
           </h2>
+          <p className="text-sm md:text-base max-w-lg mx-auto mt-4 font-light" style={{ color: `${COLORS.text[5]}59` }}>
+            It helps build a digital legacy that generations will rely on
+          </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-3 gap-6">
-          {infoItems.map((item, i) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-              className="group relative p-8 rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 text-center"
-            >
-              {/* Icon with glow effect */}
-              <div className="relative mb-6 inline-block">
-                <div className="w-14 h-14 mx-auto rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-[#9D8FD1]/20 group-hover:scale-110 transition-all duration-500">
-                  <item.icon size={22} className="text-[#9D8FD1] group-hover:text-white transition-colors duration-500" strokeWidth={1.5} />
-                </div>
-                {/* Hover glow */}
-                <div className="absolute -inset-3 bg-[#9D8FD1]/10 rounded-full scale-0 group-hover:scale-100 transition-transform duration-700 blur-xl" />
-              </div>
-              
-              <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-white/90 transition-colors duration-300">
-                {item.title}
-              </h3>
-              <p className="text-white/40 text-[15px] leading-relaxed font-light group-hover:text-white/50 transition-colors duration-300">
-                {item.description}
-              </p>
+        <div className="relative pb-16">
+          <div className="overflow-hidden mb-10">
+            <div className="relative">
+              <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                <motion.div
+                  key={currentIndex}
+                  custom={direction}
+                  initial={{ x: direction > 0 ? "105%" : "-105%", opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: direction > 0 ? "-105%" : "105%", opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 28, mass: 0.8 }}
+                  className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full"
+                >
+                  {[0, 1, 2].map((offset) => {
+                    const item = getSlide(offset);
+                    const Icon = item.icon;
+                    return (
+                      <motion.div
+                        key={item.title}
+                        whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                        className="group p-6 rounded-2xl h-full"
+                        style={{ background: COLORS.text[5] }}
+                      >
+                        <div className="h-0.5 w-8 rounded-full mb-4" style={{ background: item.color }} />
+                        <div
+                          className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300"
+                          style={{ background: item.iconBg }}
+                        >
+                          <Icon className="w-5 h-5" style={{ color: item.color }} strokeWidth={1.5} />
+                        </div>
+                        <h3 className="font-['Cormorant_Garamond',serif] text-base font-bold mb-2 leading-snug" style={{ color: COLORS.text[1] }}>
+                          {item.title}
+                        </h3>
+                        <p className="text-[12px] leading-relaxed font-light" style={{ color: COLORS.text[2] }}>
+                          {item.description}
+                        </p>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
 
-              {/* Bottom accent line */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-[#9D8FD1] to-transparent group-hover:w-3/4 transition-all duration-500" />
-            </motion.div>
-          ))}
+          <div className="flex items-center justify-center gap-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={goPrev}
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
+              style={{
+                background: `${COLORS.text[5]}0A`,
+                border: `1px solid ${COLORS.text[5]}14`,
+                color: `${COLORS.text[5]}80`,
+              }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+              </svg>
+            </motion.button>
+
+            <div className="flex gap-1.5 items-center">
+              {impactItems.map((item, idx) => (
+                <motion.button
+                  key={idx}
+                  onClick={() => goTo(idx)}
+                  className="rounded-full transition-all duration-300"
+                  animate={{
+                    width: idx === currentIndex ? 16 : 6,
+                    height: 6,
+                  }}
+                  style={{
+                    background: idx === currentIndex ? item.color : `${COLORS.text[5]}1F`,
+                  }}
+                />
+              ))}
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={goNext}
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
+              style={{
+                background: `${COLORS.text[5]}0A`,
+                border: `1px solid ${COLORS.text[5]}14`,
+                color: `${COLORS.text[5]}80`,
+              }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </motion.button>
+          </div>
         </div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="text-center text-[13px] mt-4 font-light max-w-xl mx-auto leading-relaxed"
+          style={{ color: `${COLORS.text[5]}33` }}
+        >
+          Hiliree was created with one mission: to help families preserve their stories, honor their roots, 
+          and stay connected across time and distance.
+        </motion.p>
       </div>
     </section>
   );

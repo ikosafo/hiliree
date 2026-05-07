@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ShieldCheck, Users, Camera, GitBranch } from "lucide-react";
 import { motion, type Transition } from "framer-motion";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
 /* ─────────────────────────────────────────────
    Shared easing curve
@@ -110,7 +111,7 @@ function PhoneRings({ className = "" }: { className?: string }) {
       <motion.div
         className="absolute rounded-full border opacity-[0.06]"
         style={{ 
-          borderColor: "#41307e",
+          borderColor: COLORS.brand[6],
           width: "110%",
           height: "110%",
         }}
@@ -121,7 +122,7 @@ function PhoneRings({ className = "" }: { className?: string }) {
       <motion.div
         className="absolute rounded-full border opacity-[0.1]"
         style={{ 
-          borderColor: "#41307e",
+          borderColor: COLORS.brand[6],
           width: "92%",
           height: "92%",
         }}
@@ -133,18 +134,32 @@ function PhoneRings({ className = "" }: { className?: string }) {
 }
 
 /* ─────────────────────────────────────────────
-   Main hero - REVAMPED
+   Main hero
 ───────────────────────────────────────────── */
 export function HeroSection() {
   return (
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "linear-gradient(155deg, #FAFAF8 0%, #F2EDE6 55%, rgba(23,17,61,0.04) 100%)" }}
+      style={{ 
+        background: `linear-gradient(155deg, #FAFAF8 0%, #F2EDE6 55%, ${COLORS.brand[6]}0a 100%)`
+      }}
     >
       {/* ── Animated atmospheric blobs ── */}
-      <Blob className="w-[600px] h-[600px] -top-32 -right-40 opacity-30" color="rgba(23,17,61,0.08)" animate={true} />
-      <Blob className="w-[500px] h-[500px] bottom-0 -left-40 opacity-25" color="#FDE8D8" animate={true} />
-      <Blob className="w-[320px] h-[320px] top-1/2 left-1/3 opacity-15" color="rgba(29,22,65,0.06)" animate={true} />
+      <Blob 
+        className="w-[600px] h-[600px] -top-32 -right-40 opacity-30" 
+        color={`${COLORS.brand[6]}14`}
+        animate={true} 
+      />
+      <Blob 
+        className="w-[500px] h-[500px] bottom-0 -left-40 opacity-25" 
+        color="#FDE8D8" 
+        animate={true} 
+      />
+      <Blob 
+        className="w-[320px] h-[320px] top-1/2 left-1/3 opacity-15" 
+        color={`${COLORS.brand[5]}10`}
+        animate={true} 
+      />
 
       {/* ── Fine grain texture overlay ── */}
       <div
@@ -159,15 +174,14 @@ export function HeroSection() {
       <div
         className="absolute right-0 top-0 w-[56%] h-full pointer-events-none hidden lg:block"
         style={{
-          background:
-            "radial-gradient(ellipse 70% 80% at 100% 50%, rgba(23,17,61,0.12) 0%, transparent 70%)",
+          background: `radial-gradient(ellipse 70% 80% at 100% 50%, ${COLORS.brand[6]}1f 0%, transparent 70%)`,
         }}
       />
 
       <div className="section-wrapper relative w-full grid lg:grid-cols-[1fr_480px] gap-12 xl:gap-24 items-center py-28 lg:py-32">
 
         {/* ════════════════════════════════
-            LEFT — COPY (IMPROVED)
+            LEFT — COPY
         ════════════════════════════════ */}
         <div className="space-y-8 max-w-2xl">
 
@@ -176,14 +190,15 @@ export function HeroSection() {
             <motion.span
               className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest px-4 py-2.5 rounded-full border font-poppins backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-default"
               style={{
-                background: "linear-gradient(135deg, rgba(23,17,61,0.08) 0%, rgba(23,17,61,0.04) 100%)",
-                borderColor: "rgba(23,17,61,0.2)",
-                color: "#41307e",
+                background: `linear-gradient(135deg, ${COLORS.brand[5]}14 0%, ${COLORS.brand[5]}0a 100%)`,
+                borderColor: `${COLORS.brand[5]}33`,
+                color: COLORS.brand[5],
               }}
               whileHover={{ y: -2 }}
             >
               <motion.span 
-                className="w-1.5 h-1.5 rounded-full bg-[#41307e]" 
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: COLORS.brand[5] }}
                 animate={{ scale: [1, 1.5, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
@@ -191,29 +206,33 @@ export function HeroSection() {
             </motion.span>
           </motion.div>
 
-          {/* Headline - Single line with serif font */}
+          {/* Headline */}
           <motion.h1
             {...stagger(1)}
             className="font-['Cormorant_Garamond',serif] leading-[1.05] tracking-[-0.02em] font-bold mb-6"
             style={{ 
               fontSize: "clamp(3rem, 5.5vw, 4.5rem)",
-              color: "#2D206A"
+              color: COLORS.brand[6],
             }}
           >
             Your Family.<br />
-            <em style={{ color: "#1a56ff", fontStyle: "italic" }}>Your Story.</em><br />
+            <em style={{ color: COLORS.warning[6], fontStyle: "italic" }}>Your Story.</em><br />
             Nobody Else&apos;s.
           </motion.h1>
 
           {/* Sub-headline */}
           <motion.p
             {...stagger(2)}
-            className="text-[18px] text-gray-600 leading-[1.8] max-w-[480px] font-poppins font-light"
+            className="text-[18px] leading-[1.8] max-w-[480px] font-poppins font-light"
+            style={{ color: COLORS.text[2] }}
           >
             Hiliree is the private family app to build your tree, preserve
             memories, and stay connected{" "}
             <motion.span 
-              className="font-semibold bg-gradient-to-r from-[#41307e] to-[#6b5bb5] bg-clip-text text-transparent"
+              className="font-semibold bg-gradient-to-r text-transparent bg-clip-text"
+              style={{
+                backgroundImage: `linear-gradient(to right, ${COLORS.brand[5]}, ${COLORS.brand[4]})`,
+              }}
               animate={{ opacity: [0.8, 1, 0.8] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
@@ -221,7 +240,7 @@ export function HeroSection() {
             </motion.span>
           </motion.p>
 
-          {/* App store buttons - Equal sized */}
+          {/* App store buttons */}
           <motion.div 
             {...stagger(3)} 
             className="flex flex-row gap-3 items-center pt-4"
@@ -238,7 +257,7 @@ export function HeroSection() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 px-5 py-2.5 rounded-xl transition-all duration-300 min-w-[160px]"
                 style={{
-                  background: "linear-gradient(145deg, #2C2C2E 0%, #1C1C1E 100%)",
+                  background: `linear-gradient(145deg, ${COLORS.brand[6]} 0%, ${COLORS.brand[5]} 100%)`,
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                   border: "1px solid rgba(255,255,255,0.08)"
                 }}
@@ -269,8 +288,7 @@ export function HeroSection() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 px-5 py-2.5 rounded-xl transition-all duration-300 min-w-[160px]"
                 style={{
-                  background: "linear-gradient(145deg, #2C2C2E 0%, #1C1C1E 100%)",
-                  borderColor: "rgba(255,255,255,0.08)",
+                  background: `linear-gradient(145deg, ${COLORS.brand[6]} 0%, ${COLORS.brand[5]} 100%)`,
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                   border: "1px solid rgba(255,255,255,0.08)"
                 }}
@@ -290,25 +308,26 @@ export function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* Enhanced trust signal */}
+          {/* Trust signal */}
           <motion.div
             {...stagger(4)}
-            className="inline-flex items-center gap-3 text-[13px] text-gray-500 font-poppins pt-2"
+            className="inline-flex items-center gap-3 text-[13px] font-poppins pt-2"
+            style={{ color: COLORS.text[2] }}
           >
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <ShieldCheck size={16} className="text-green-500" />
+              <ShieldCheck size={16} style={{ color: COLORS.success[6] }} />
             </motion.div>
             <span className="font-medium">Your data stays private. Always.</span>
-            <span className="text-gray-300">·</span>
+            <span style={{ color: COLORS.border[3] }}>·</span>
             <span>4.9 ★ on App Store</span>
           </motion.div>
         </div>
 
         {/* ════════════════════════════════
-            RIGHT — PHONE MOCKUP (IMPROVED)
+            RIGHT — PHONE MOCKUP
         ════════════════════════════════ */}
         <motion.div
           initial={{ opacity: 0, y: 60, scale: 0.9 }}
@@ -316,35 +335,30 @@ export function HeroSection() {
           transition={{ delay: 0.3, duration: 0.9, ease: EASE } satisfies Transition}
           className="hidden lg:flex justify-center items-center relative"
         >
-          {/* Phone container with rings */}
           <div className="relative flex items-center justify-center">
             {/* Glow pool beneath */}
             <motion.div
               className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[280px] h-32 blur-3xl rounded-full opacity-50"
               style={{ 
-                background: "linear-gradient(90deg, rgba(23,17,61,0.35), rgba(29,22,65,0.35))",
+                background: `linear-gradient(90deg, ${COLORS.brand[6]}59, ${COLORS.brand[5]}59)`,
               }}
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.4, 0.6, 0.4],
-              }}
+              animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.6, 0.4] }}
               transition={{ duration: 4, repeat: Infinity }}
             />
 
-            {/* Rings around phone */}
             <PhoneRings />
 
-            {/* Phone image with parallax */}
+            {/* Phone image */}
             <motion.div 
               className="relative w-[280px] h-[540px] z-10"
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               <Image
-                src="/images/hero-img.webp"
+                src="/images/hero/heroimg.webp"
                 alt="Hiliree app — family tree, memories, and connection"
                 fill
-                className="object-contain drop-shadow-[0_40px_80px_rgba(23,17,61,0.25)]"
+                className="object-contain drop-shadow-[0_40px_80px_rgba(39,13,77,0.25)]"
                 priority
                 sizes="280px"
               />
@@ -353,8 +367,8 @@ export function HeroSection() {
             {/* Floating Card — Family Tree */}
             <FloatingCard
               icon={GitBranch}
-              bg="rgba(23,17,61,0.08)"
-              iconColor="#503c9d"
+              bg={`${COLORS.brand[5]}14`}
+              iconColor={COLORS.brand[5]}
               title="Family Tree"
               sub="4 generations added"
               motionProps={floatIn("left", 0.7)}
@@ -364,8 +378,8 @@ export function HeroSection() {
             {/* Floating Card — Memory */}
             <FloatingCard
               icon={Camera}
-              bg="#FEF3C7"
-              iconColor="#F59E0B"
+              bg={`${COLORS.gold[2]}`}
+              iconColor={COLORS.gold[6]}
               title="Memory Added"
               sub="Summer 1987"
               motionProps={floatIn("right", 0.95)}
@@ -375,8 +389,8 @@ export function HeroSection() {
             {/* Floating Card — Connected */}
             <FloatingCard
               icon={Users}
-              bg="#DCFCE7"
-              iconColor="#10B981"
+              bg={`${COLORS.success[1]}`}
+              iconColor={COLORS.success[6]}
               title="Family Connected"
               sub="12 members joined"
               motionProps={floatIn("left", 1.2)}
@@ -386,7 +400,7 @@ export function HeroSection() {
         </motion.div>
 
         {/* ════════════════════════════════
-            MOBILE phone (FIXED)
+            MOBILE phone
         ════════════════════════════════ */}
         <motion.div 
           initial={{ opacity: 0, y: 40, scale: 0.9 }}
@@ -399,22 +413,17 @@ export function HeroSection() {
             <motion.div
               className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-24 blur-2xl rounded-full opacity-40"
               style={{ 
-                background: "linear-gradient(90deg, rgba(23,17,61,0.3), rgba(29,22,65,0.3))",
+                background: `linear-gradient(90deg, ${COLORS.brand[6]}4d, ${COLORS.brand[5]}4d)`,
               }}
-              animate={{
-                scale: [1, 1.08, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
+              animate={{ scale: [1, 1.08, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity }}
             />
 
-            {/* Mobile rings */}
             <PhoneRings className="scale-75" />
 
-            {/* Phone Image */}
             <div className="relative w-56 h-[430px] z-10">
               <Image
-                src="/images/hero-img.webp"
+                src="/images/hero/heroimg.webp"
                 alt="Hiliree app"
                 fill
                 className="object-contain drop-shadow-2xl"
@@ -423,11 +432,10 @@ export function HeroSection() {
               />
             </div>
 
-            {/* Mobile Floating Cards */}
             <FloatingCard
               icon={GitBranch}
-              bg="rgba(23,17,61,0.08)"
-              iconColor="#503c9d"
+              bg={`${COLORS.brand[5]}14`}
+              iconColor={COLORS.brand[5]}
               title="Family Tree"
               sub="4 generations"
               motionProps={floatIn("left", 0.5)}
@@ -436,8 +444,8 @@ export function HeroSection() {
 
             <FloatingCard
               icon={Camera}
-              bg="#FEF3C7"
-              iconColor="#F59E0B"
+              bg={COLORS.gold[2]}
+              iconColor={COLORS.gold[6]}
               title="Memory"
               sub="Summer 1987"
               motionProps={floatIn("right", 0.75)}
@@ -446,8 +454,8 @@ export function HeroSection() {
 
             <FloatingCard
               icon={Users}
-              bg="#DCFCE7"
-              iconColor="#10B981"
+              bg={COLORS.success[1]}
+              iconColor={COLORS.success[6]}
               title="Connected"
               sub="12 members"
               motionProps={floatIn("left", 1)}
@@ -457,7 +465,7 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* ── Enhanced scroll hint ── */}
+      {/* ── Scroll hint ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -465,7 +473,8 @@ export function HeroSection() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <motion.span 
-          className="text-[11px] font-medium uppercase tracking-[0.2em] text-gray-400 font-poppins"
+          className="text-[11px] font-medium uppercase tracking-[0.2em] font-poppins"
+          style={{ color: COLORS.text[3] }}
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2.5, repeat: Infinity }}
         >

@@ -1,31 +1,13 @@
 ﻿// hiliree-web\src\components\sections\donate\DonationTiers.tsx
 "use client";
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence, type Transition } from "framer-motion";
-import {
-  Leaf,
-  Hammer,
-  Sparkles,
-  TreePine,
-  Heart,
-  X,
-  ShieldCheck,
-  Lock,
-  ArrowRight,
-  CheckCircle2,
-  Star,
-} from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Leaf, Hammer, Sparkles, TreePine, Heart, X, ShieldCheck, Lock, Gift } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
-import {
-  Elements,
-  PaymentElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
+import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -35,161 +17,143 @@ type Tier = {
   Icon: React.ElementType;
   description: string;
   popular: boolean;
+  color: string;
 };
 
 const tiers: Tier[] = [
-  {
-    name: "Supporter",
-    price: 10,
-    Icon: Leaf,
-    description: "Help maintain essential operations and platform stability.",
-    popular: false,
-  },
-  {
-    name: "Builder",
-    price: 25,
-    Icon: Hammer,
-    description: "Drives meaningful enhancements, improvements, and regular updates.",
-    popular: false,
-  },
-  {
-    name: "Innovator",
-    price: 50,
-    Icon: Sparkles,
-    description: "Powers new features and fuels creative development for stronger family connection.",
-    popular: true,
-  },
-  {
-    name: "Legacy Partner",
-    price: 100,
-    Icon: TreePine,
-    description: "A foundational contribution supporting long-term growth, innovation, and the future of Hiliree.",
-    popular: false,
-  },
+  { name: "Supporter", price: 10, Icon: Leaf, description: "Help maintain essential operations and platform stability.", popular: false, color: COLORS.success[6] },
+  { name: "Builder", price: 25, Icon: Hammer, description: "Drives meaningful enhancements, improvements, and regular updates.", popular: false, color: COLORS.blue[6] },
+  { name: "Innovator", price: 50, Icon: Sparkles, description: "Powers new features and fuels creative development for stronger family connection.", popular: true, color: COLORS.brand[7] },
+  { name: "Legacy Partner", price: 100, Icon: TreePine, description: "A foundational contribution supporting long-term growth, innovation, and the future of Hiliree.", popular: false, color: COLORS.gold[6] },
 ];
 
-/* Checkout Form */
-function CheckoutForm({
-  tier,
-  onSuccess,
-  onClose,
-}: {
-  tier: Tier;
-  onSuccess: () => void;
-  onClose: () => void;
-}) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+const customTier: Tier = {
+  name: "Custom Amount",
+  price: 0,
+  Icon: Gift,
+  description: "Choose any amount that feels right to you. Every contribution, no matter the size, makes a difference.",
+  popular: false,
+  color: COLORS.magenta[6],
+};
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
-
-    setStatus("loading");
-    setErrorMsg("");
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/donate/thank-you`,
-      },
-      redirect: "if_required",
-    });
-
-    if (error) {
-      setErrorMsg(error.message ?? "Payment failed. Please try again.");
-      setStatus("error");
-    } else {
-      onSuccess();
-    }
-  };
+/* Step 1: Amount */
+function DonationForm({ tier, onNext }: { tier: Tier; onNext: (amount: number) => void }) {
+  const [amount, setAmount] = useState(tier.price || 25);
+  const [customAmount, setCustomAmount] = useState(tier.price === 0 ? "" : "");
+  const presetAmounts = [10, 25, 50, 100];
+  const isCustomTier = tier.price === 0;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="flex items-center justify-between px-5 py-4 rounded-2xl border border-[#41307e]/10 bg-[#41307e]/[0.02]">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#41307e]/5 flex items-center justify-center">
-            <tier.Icon size={18} className="text-[#41307e]" strokeWidth={1.5} />
-          </div>
-          <div>
-            <p className="text-[13px] font-semibold text-gray-900">{tier.name}</p>
-            <p className="text-[11px] text-gray-500">One-time donation</p>
-          </div>
-        </div>
-        <span className="font-serif text-2xl text-gray-900 font-bold">
-          ${tier.price}
-        </span>
+    <div className="space-y-5">
+      <div>
+        <p className="text-[14px] font-semibold mb-1" style={{ color: COLORS.text[1] }}>
+          {isCustomTier ? "Choose your donation amount" : "How much would you like to donate today?"}
+        </p>
+        <p className="text-[11px]" style={{ color: COLORS.text[2] }}>All donations directly impact our organization and help us further our mission.</p>
       </div>
 
-      <PaymentElement
-        options={{
-          layout: "tabs",
-          fields: { billingDetails: { name: "auto" } },
-        }}
-      />
-
-      {status === "error" && (
-        <div className="flex items-start gap-2.5 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-[13px] text-red-600">
-          <X size={14} className="shrink-0 mt-0.5" />
-          {errorMsg}
+      <div>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.1em] mb-3" style={{ color: COLORS.text[3] }}>Donation Amount *</p>
+        {!isCustomTier && (
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            {presetAmounts.map((preset) => (
+              <button
+                key={preset}
+                onClick={() => { setAmount(preset); setCustomAmount(""); }}
+                className="py-3 rounded-xl text-[14px] font-semibold font-poppins transition-all duration-200"
+                style={{
+                  background: amount === preset && !customAmount ? COLORS.brand[5] : `${COLORS.brand[5]}0A`,
+                  color: amount === preset && !customAmount ? COLORS.text[5] : COLORS.brand[5],
+                  border: amount === preset && !customAmount ? `1px solid ${COLORS.brand[5]}` : `1px solid ${COLORS.brand[5]}1A`,
+                }}
+              >
+                ${preset.toFixed(2)}
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[13px]" style={{ color: COLORS.text[3] }}>$</span>
+          <input
+            type="number"
+            placeholder={isCustomTier ? "Enter your amount" : "Enter custom amount"}
+            value={isCustomTier ? customAmount : customAmount}
+            onChange={(e) => { setCustomAmount(e.target.value); if (!isCustomTier) setAmount(0); }}
+            className="w-full pl-8 pr-4 py-3 rounded-xl border text-[14px] font-poppins outline-none transition-all duration-200"
+            style={{
+              borderColor: (isCustomTier || customAmount) ? COLORS.brand[5] : `${COLORS.brand[5]}26`,
+              background: (isCustomTier || customAmount) ? `${COLORS.brand[5]}05` : COLORS.text[5],
+              color: COLORS.text[1],
+            }}
+          />
         </div>
-      )}
+      </div>
 
       <button
-        type="submit"
-        disabled={!stripe || !elements || status === "loading"}
-        className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-[15px] text-white transition-all active:scale-[0.98] disabled:opacity-60"
-        style={{
-          background:
-            status === "loading"
-              ? "#9CA3AF"
-              : "linear-gradient(135deg, #41307e 0%, #6C5CE7 100%)",
-          boxShadow: "0 4px 25px rgba(65, 48, 126, 0.3)",
-        }}
+        onClick={() => onNext(isCustomTier ? parseFloat(customAmount) : (customAmount ? parseFloat(customAmount) : amount))}
+        disabled={isCustomTier ? !customAmount : (!amount && !customAmount)}
+        className="w-full py-3.5 rounded-xl font-semibold text-[14px] font-poppins transition-all duration-200 disabled:opacity-40"
+        style={{ background: COLORS.brand[5], color: COLORS.text[5] }}
       >
-        {status === "loading" ? (
-          <>
-            <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeOpacity="0.3" />
-              <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-            </svg>
-            Processing…
-          </>
-        ) : (
-          <>
-            <Heart size={16} />
-            Donate ${tier.price}
-          </>
-        )}
+        Donate now →
       </button>
-
-      <div className="flex items-center justify-center gap-5 text-[11px] text-gray-400">
-        <span className="flex items-center gap-1">
-          <Lock size={10} />
-          SSL encrypted
-        </span>
-        <span className="flex items-center gap-1">
-          <ShieldCheck size={10} />
-          Secured by Stripe
-        </span>
-      </div>
-    </form>
+    </div>
   );
 }
 
-/* Payment Modal */
-function PaymentModal({ tier, onClose }: { tier: Tier; onClose: () => void }) {
+/* Step 2: Info */
+function ContactForm({ amount, onBack, onNext }: { amount: number; onBack: () => void; onNext: () => void }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <p className="text-[14px] font-semibold mb-1" style={{ color: COLORS.text[1] }}>Who&apos;s Giving Today?</p>
+        <p className="text-[11px]" style={{ color: COLORS.text[2] }}>We&apos;ll never share this information with anyone.</p>
+      </div>
+
+      <div className="flex items-center justify-between px-3 py-2.5 rounded-lg" style={{ background: `${COLORS.brand[5]}08` }}>
+        <span className="text-[12px]" style={{ color: COLORS.text[2] }}>Donation amount</span>
+        <span className="font-['Cormorant_Garamond',serif] text-lg font-bold" style={{ color: COLORS.brand[5] }}>${amount.toFixed(2)}</span>
+      </div>
+
+      <div className="space-y-3">
+        <div>
+          <label className="block text-[10px] font-semibold uppercase tracking-[0.08em] mb-1.5" style={{ color: COLORS.text[2] }}>First name *</label>
+          <input type="text" placeholder="First name" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full px-4 py-3 rounded-xl border text-[13px] font-poppins outline-none transition-colors" style={{ borderColor: COLORS.border[2], color: COLORS.text[1] }} />
+        </div>
+        <div>
+          <label className="block text-[10px] font-semibold uppercase tracking-[0.08em] mb-1.5" style={{ color: COLORS.text[2] }}>Last name</label>
+          <input type="text" placeholder="Last name" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full px-4 py-3 rounded-xl border text-[13px] font-poppins outline-none transition-colors" style={{ borderColor: COLORS.border[2], color: COLORS.text[1] }} />
+        </div>
+        <div>
+          <label className="block text-[10px] font-semibold uppercase tracking-[0.08em] mb-1.5" style={{ color: COLORS.text[2] }}>Email Address *</label>
+          <input type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 rounded-xl border text-[13px] font-poppins outline-none transition-colors" style={{ borderColor: COLORS.border[2], color: COLORS.text[1] }} />
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        <button onClick={onBack} className="px-4 py-3 rounded-xl text-[13px] font-semibold border font-poppins transition-colors hover:bg-gray-50" style={{ color: COLORS.text[2], borderColor: COLORS.border[3] }}>Back</button>
+        <button onClick={onNext} disabled={!firstName.trim() || !email.trim()} className="flex-1 py-3 rounded-xl font-semibold text-[13px] font-poppins transition-all duration-200 disabled:opacity-40" style={{ background: COLORS.brand[5], color: COLORS.text[5] }}>Continue</button>
+      </div>
+    </div>
+  );
+}
+
+/* Step 3: Payment */
+function PaymentStep({ amount, onBack }: { amount: number; onBack: () => void }) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
   useState(() => {
     fetch("/api/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: tier.price, tierName: tier.name }),
+      body: JSON.stringify({ amount, tierName: "Donation" }),
     })
       .then((r) => r.json())
       .then((d) => {
@@ -199,300 +163,281 @@ function PaymentModal({ tier, onClose }: { tier: Tier; onClose: () => void }) {
       .catch(() => setLoadError(true));
   });
 
+  if (success) {
+    return (
+      <div className="text-center py-8 space-y-4">
+        <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto" style={{ background: COLORS.success[1] }}>
+          <Heart size={24} style={{ color: COLORS.success[5] }} />
+        </div>
+        <h3 className="font-['Cormorant_Garamond',serif] text-xl" style={{ color: COLORS.text[1] }}>Thank you!</h3>
+        <p className="text-[13px]" style={{ color: COLORS.text[2] }}>Your ${amount.toFixed(2)} donation has been received.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <p className="text-[14px] font-semibold mb-1" style={{ color: COLORS.text[1] }}>Payment Details</p>
+        <p className="text-[11px]" style={{ color: COLORS.text[2] }}>How would you like to pay for your donation?</p>
+      </div>
+
+      {/* Summary */}
+      <div className="p-4 rounded-xl space-y-2" style={{ background: `${COLORS.brand[5]}08`, border: `1px solid ${COLORS.brand[5]}0F` }}>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.08em] mb-2" style={{ color: COLORS.text[3] }}>Donation Summary</p>
+        <div className="flex justify-between text-[12px]">
+          <span style={{ color: COLORS.text[2] }}>Payment Amount</span>
+          <span className="font-semibold" style={{ color: COLORS.text[1] }}>${amount.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-[12px]">
+          <span style={{ color: COLORS.text[2] }}>Giving Frequency</span>
+          <span style={{ color: COLORS.text[1] }}>One time</span>
+        </div>
+        <div className="border-t pt-2 mt-2 flex justify-between text-[13px]" style={{ borderColor: `${COLORS.brand[5]}1A` }}>
+          <span className="font-semibold" style={{ color: COLORS.text[1] }}>Donation Total</span>
+          <span className="font-bold" style={{ color: COLORS.brand[5] }}>${amount.toFixed(2)}</span>
+        </div>
+      </div>
+
+      <label className="flex items-start gap-2 text-[11px] leading-relaxed cursor-pointer" style={{ color: COLORS.text[2] }}>
+        <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5" style={{ accentColor: COLORS.brand[5] }} />
+        I agree to the Terms and conditions.
+      </label>
+
+      <p className="text-[10px] leading-relaxed" style={{ color: COLORS.text[3] }}>
+        Acceptance of any contribution, gift or grant is at the discretion of Hiliree. Hiliree will not accept any gift unless it can be used or expended consistently with the purpose and mission of Hiliree.
+      </p>
+
+      {loadError ? (
+        <div className="text-center py-4">
+          <p className="text-[12px] mb-3" style={{ color: COLORS.text[2] }}>Unable to load payment. Please try again.</p>
+          <button onClick={onBack} className="px-4 py-2 rounded-lg border text-[12px]" style={{ borderColor: COLORS.border[3], color: COLORS.text[2] }}>Go back</button>
+        </div>
+      ) : !clientSecret ? (
+        <div className="flex flex-col items-center justify-center py-8 gap-3">
+          <svg className="animate-spin w-5 h-5" style={{ color: COLORS.brand[5] }} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeOpacity="0.2" />
+            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <p className="text-[12px]" style={{ color: COLORS.text[3] }}>Preparing secure checkout</p>
+        </div>
+      ) : (
+        <Elements
+          stripe={stripePromise}
+          options={{
+            clientSecret,
+            appearance: {
+              theme: "stripe",
+              variables: { colorPrimary: COLORS.brand[5], colorBackground: COLORS.text[5], colorText: COLORS.text[1], fontFamily: "system-ui, sans-serif", borderRadius: "10px" },
+            },
+          }}
+        >
+          <PaymentForm amount={amount} agreed={agreed} onSuccess={() => setSuccess(true)} onBack={onBack} />
+        </Elements>
+      )}
+    </div>
+  );
+}
+
+function PaymentForm({ amount, agreed, onSuccess, onBack }: { amount: number; agreed: boolean; onSuccess: () => void; onBack: () => void }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+    setStatus("loading");
+    setErrorMsg("");
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: { return_url: `${window.location.origin}/donate/thank-you` },
+      redirect: "if_required",
+    });
+
+    if (error) {
+      setErrorMsg(error.message ?? "Payment failed.");
+      setStatus("error");
+    } else {
+      onSuccess();
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <PaymentElement />
+      {errorMsg && <div className="text-[11px] flex items-start gap-1.5" style={{ color: COLORS.danger[6] }}><X size={11} className="shrink-0 mt-0.5" />{errorMsg}</div>}
+      <div className="flex gap-3">
+        <button type="button" onClick={onBack} className="px-4 py-3 rounded-xl text-[13px] font-semibold border font-poppins" style={{ color: COLORS.text[2], borderColor: COLORS.border[3] }}>Back</button>
+        <button
+          type="submit"
+          disabled={!stripe || !elements || !agreed || status === "loading"}
+          className="flex-1 py-3 rounded-xl font-semibold text-[13px] font-poppins transition-all duration-200 disabled:opacity-40"
+          style={{ background: COLORS.brand[5], color: COLORS.text[5] }}
+        >
+          {status === "loading" ? "Processing..." : `Donate $${amount.toFixed(2)}`}
+        </button>
+      </div>
+      <div className="flex items-center justify-center gap-3 text-[10px]" style={{ color: COLORS.text[3] }}>
+        <span className="flex items-center gap-1"><Lock size={9} />SSL encrypted</span>
+        <span className="flex items-center gap-1"><ShieldCheck size={9} />Secured by Stripe</span>
+      </div>
+    </form>
+  );
+}
+
+/* Modal */
+function DonationModal({ tier, onClose }: { tier: Tier; onClose: () => void }) {
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [amount, setAmount] = useState(tier.price || 0);
+
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 16 }}
-        transition={{ duration: 0.3, ease: EASE } satisfies Transition}
-        className="relative w-full max-w-[460px] rounded-3xl overflow-hidden bg-white shadow-[0_32px_80px_rgba(0,0,0,0.15)]"
+        transition={{ duration: 0.25, ease: EASE }}
+        className="relative w-full max-w-[460px] max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-xl"
+        style={{ background: COLORS.text[5] }}
       >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-          <div>
-            <p className="font-semibold text-gray-900 text-[15px]">Complete your donation</p>
-            <p className="text-[12px] text-gray-500 mt-0.5">Your support helps families stay connected</p>
-          </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors">
-            <X size={15} />
+        <div className="flex items-center justify-between px-5 py-4 border-b sticky top-0 z-10" style={{ borderColor: COLORS.border[2], background: COLORS.text[5] }}>
+          <p className="font-semibold text-[14px]" style={{ color: COLORS.text[1] }}>
+            {step === 1 ? "Support Hiliree" : step === 2 ? "Your Information" : "Payment Details"}
+          </p>
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center transition-colors" style={{ background: COLORS.fill[2], color: COLORS.text[2] }}>
+            <X size={14} />
           </button>
         </div>
-
-        <div className="px-6 py-6">
-          {success ? (
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mx-auto">
-                <CheckCircle2 size={32} className="text-emerald-500" />
-              </div>
-              <h3 className="font-serif text-2xl text-gray-900">Thank you!</h3>
-              <p className="text-gray-500 text-[14px]">
-                Your ${tier.price} donation as a <strong className="text-gray-700">{tier.name}</strong> is confirmed.
-              </p>
-              <button onClick={onClose} className="mt-4 px-6 py-2.5 rounded-full bg-[#41307e] text-white font-semibold text-sm hover:bg-[#41307e]/90 transition-colors">
-                Close
-              </button>
-            </motion.div>
-          ) : loadError ? (
-            <div className="text-center py-8 space-y-3">
-              <p className="text-gray-500 text-[14px]">Unable to load payment. Please try again.</p>
-              <button onClick={onClose} className="px-5 py-2 rounded-full border border-gray-200 text-sm text-gray-600 hover:border-gray-300 transition-colors">
-                Close
-              </button>
-            </div>
-          ) : !clientSecret ? (
-            <div className="flex flex-col items-center justify-center py-12 gap-3">
-              <svg className="animate-spin w-6 h-6 text-[#41307e]" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeOpacity="0.2" />
-                <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-              </svg>
-              <p className="text-[13px] text-gray-400">Preparing secure checkout…</p>
-            </div>
-          ) : (
-            <Elements
-              stripe={stripePromise}
-              options={{
-                clientSecret,
-                appearance: {
-                  theme: "stripe",
-                  variables: {
-                    colorPrimary: "#41307e",
-                    colorBackground: "#ffffff",
-                    colorText: "#111827",
-                    colorDanger: "#EF4444",
-                    fontFamily: "Poppins, system-ui, sans-serif",
-                    borderRadius: "12px",
-                    spacingUnit: "4px",
-                  },
-                  rules: {
-                    ".Input": {
-                      border: "1.5px solid #E5E7EB",
-                      boxShadow: "none",
-                      padding: "12px 14px",
-                    },
-                    ".Input:focus": {
-                      border: "1.5px solid #41307e",
-                      boxShadow: "0 0 0 3px rgba(65,48,126,0.1)",
-                    },
-                    ".Label": {
-                      fontWeight: "600",
-                      fontSize: "12px",
-                      color: "#6B7280",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.06em",
-                    },
-                  },
-                },
-              }}
-            >
-              <CheckoutForm tier={tier} onSuccess={() => setSuccess(true)} onClose={onClose} />
-            </Elements>
-          )}
+        <div className="px-5 py-5">
+          {step === 1 && <DonationForm tier={tier} onNext={(amt) => { setAmount(amt); setStep(2); }} />}
+          {step === 2 && <ContactForm amount={amount} onBack={() => setStep(1)} onNext={() => setStep(3)} />}
+          {step === 3 && <PaymentStep amount={amount} onBack={() => setStep(2)} />}
         </div>
       </motion.div>
     </div>
   );
 }
 
-/* Tier Card - with animations */
-function TierCard({ tier, index, onSelect }: { tier: Tier; index: number; onSelect: (t: Tier) => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ 
-        delay: index * 0.12, 
-        duration: 0.6, 
-        ease: EASE 
-      } satisfies Transition}
-      whileHover={{ y: -8, transition: { duration: 0.3, ease: EASE } }}
-      className="group relative flex flex-col rounded-3xl border overflow-hidden cursor-pointer transition-shadow duration-500 bg-white"
-      style={{
-        borderColor: tier.popular ? "rgba(65,48,126,0.4)" : "rgba(65,48,126,0.12)",
-        boxShadow: tier.popular
-          ? "0 0 0 2px #41307e, 0 12px 40px rgba(65,48,126,0.12)"
-          : "0 2px 12px rgba(0,0,0,0.05)",
-      }}
-      onClick={() => onSelect(tier)}
-    >
-      {/* Popular badge with animation */}
-      {tier.popular && (
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 + index * 0.12, duration: 0.4 }}
-          className="absolute -top-px left-1/2 -translate-x-1/2"
-        >
-          <div className="bg-[#41307e] text-white text-[10px] font-bold px-4 py-1.5 rounded-b-xl tracking-wide flex items-center gap-1.5 shadow-lg shadow-[#41307e]/25">
-            <Star size={10} fill="white" className="animate-pulse" />
-            MOST POPULAR
-          </div>
-        </motion.div>
-      )}
-
-      <div className="flex flex-col flex-1 p-7 pt-8 text-center">
-        {/* Animated icon */}
-        <motion.div 
-          className="w-12 h-12 mx-auto rounded-2xl bg-[#41307e]/5 flex items-center justify-center mb-5"
-          whileHover={{ scale: 1.15, rotate: 5 }}
-          transition={{ duration: 0.3 }}
-        >
-          <tier.Icon size={22} className="text-[#41307e]" strokeWidth={1.5} />
-        </motion.div>
-
-        {/* Name with stagger */}
-        <motion.p 
-          initial={{ opacity: 0, x: -10 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 + index * 0.12, duration: 0.4 }}
-          className="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400 mb-1"
-        >
-          {tier.name}
-        </motion.p>
-
-        {/* Price with animation */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 + index * 0.12, duration: 0.5, ease: EASE }}
-          className="flex items-end justify-center gap-0.5 mb-4"
-        >
-          <span className="text-[15px] font-light text-gray-400 mb-1.5">$</span>
-          <span className="font-serif text-[56px] leading-none text-gray-900 tracking-tight">{tier.price}</span>
-          <span className="text-[12px] text-gray-400 mb-2 ml-1">/mo</span>
-        </motion.div>
-
-        {/* Description with fade */}
-        <motion.p 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 + index * 0.12, duration: 0.4 }}
-          className="text-[14px] text-gray-500 leading-relaxed mb-8 flex-1"
-        >
-          {tier.description}
-        </motion.p>
-
-        {/* CTA button with hover animation */}
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-[14px] transition-all relative overflow-hidden group/btn"
-          style={
-            tier.popular
-              ? {
-                  background: "linear-gradient(135deg, #41307e 0%, #6C5CE7 100%)",
-                  color: "#fff",
-                  boxShadow: "0 4px 25px rgba(65,48,126,0.3)",
-                }
-              : {
-                  background: "rgba(65,48,126,0.05)",
-                  color: "#41307e",
-                  border: "1.5px solid rgba(65,48,126,0.15)",
-                }
-          }
-        >
-          {/* Shine effect on hover */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-          <Heart size={14} />
-          Donate ${tier.price}
-          <ArrowRight size={13} className="ml-0.5 group-hover/btn:translate-x-0.5 transition-transform" />
-        </motion.button>
-      </div>
-    </motion.div>
-  );
-}
-
-/* Main export */
+/* Main */
 export function DonationTiers() {
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
-  const handleClose = useCallback(() => setSelectedTier(null), []);
 
   return (
     <>
-      <section className="relative py-24 bg-[#41307e] overflow-hidden">
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 z-0 opacity-[0.04]">
-          <div className="h-full w-full" style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px'
-          }} />
-        </div>
-
-        {/* Ambient glows */}
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#6C5CE7]/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-[#8B7CF6]/15 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-[150px]" />
-
-        {/* Dividers */}
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
-        <div className="section-wrapper relative z-10">
-          {/* Header */}
+      <section className="relative py-16 md:py-20" style={{ background: COLORS.fill[2] }}>
+        <div className="max-w-5xl mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: EASE }}
-            className="text-center mb-16"
+            className="text-center mb-14"
           >
-            <motion.span 
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1, duration: 0.5 }}
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/50 mb-4"
+            <span
+              className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-3.5 py-1.5 rounded-full border mb-5"
+              style={{
+                color: COLORS.brand[5],
+                backgroundColor: `${COLORS.brand[5]}15`,
+                borderColor: `${COLORS.brand[5]}33`,
+              }}
             >
-              <span className="w-1 h-1 rounded-full bg-white/50" />
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: COLORS.brand[5] }} />
               Choose Your Impact Level
-            </motion.span>
-            <motion.h2 
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="font-serif text-[36px] lg:text-[42px] leading-[1.08] text-white"
-            >
-              Pick a tier that reflects how you'd like
-              <br />
-              to support Hiliree's mission
-            </motion.h2>
+            </span>
+            <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold tracking-[-0.02em]" style={{ color: COLORS.brand[6] }}>
+              Pick a tier that reflects how you would like{" "}
+              <em className="font-light italic" style={{ color: COLORS.text[2] }}>to support Hiliree&apos;s mission</em>
+            </h2>
           </motion.div>
 
-          {/* Cards */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {tiers.map((tier, i) => (
-              <TierCard key={tier.name} tier={tier} index={i} onSelect={setSelectedTier} />
+              <motion.div
+                key={tier.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.5, ease: EASE }}
+                whileHover={{ y: -4 }}
+                onClick={() => setSelectedTier(tier)}
+                className="group relative p-6 rounded-2xl border cursor-pointer transition-all duration-300 h-full text-center"
+                style={{
+                  background: COLORS.text[5],
+                  borderColor: tier.popular ? COLORS.brand[7] : `${COLORS.border[2]}80`,
+                  boxShadow: tier.popular ? `0 4px 24px ${COLORS.brand[7]}1A` : "0 2px 8px rgba(0,0,0,0.04)",
+                }}
+              >
+                {tier.popular && (
+                  <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
+                    <span className="text-[9px] font-bold uppercase tracking-wider px-3 py-1 rounded-full" style={{ background: COLORS.brand[7], color: COLORS.text[5] }}>Most Popular</span>
+                  </div>
+                )}
+                <div className="flex flex-col h-full">
+                  <div className="w-11 h-11 mx-auto rounded-xl flex items-center justify-center mb-4" style={{ background: tier.popular ? `${COLORS.brand[7]}1A` : `${COLORS.border[2]}80` }}>
+                    <tier.Icon size={20} style={{ color: tier.popular ? COLORS.brand[7] : COLORS.text[3] }} strokeWidth={1.5} />
+                  </div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.15em] mb-2" style={{ color: COLORS.text[3] }}>{tier.name}</p>
+                  <div className="flex items-end justify-center gap-0.5 mb-3">
+                    <span className="text-[13px] font-light mb-1" style={{ color: COLORS.text[3] }}>$</span>
+                    <span className="font-['Cormorant_Garamond',serif] text-4xl font-bold leading-none" style={{ color: COLORS.text[1] }}>{tier.price}</span>
+                    <span className="text-[10px] mb-1 ml-0.5" style={{ color: COLORS.text[3] }}>/mo</span>
+                  </div>
+                  <p className="text-[12px] leading-relaxed font-light flex-1 mb-5" style={{ color: COLORS.text[2] }}>{tier.description}</p>
+                  <div
+                    className="w-full py-3 rounded-xl font-semibold text-[12px] transition-all duration-300 font-poppins"
+                    style={{
+                      background: tier.popular ? COLORS.brand[5] : "transparent",
+                      color: tier.popular ? COLORS.text[5] : COLORS.brand[5],
+                      border: tier.popular ? "none" : `1px solid ${COLORS.brand[5]}33`,
+                    }}
+                  >
+                    Donate ${tier.price}
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
 
-          {/* Footer note */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+          {/* Custom Amount Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-10 text-center flex items-center justify-center gap-2 text-[12px] text-white/40"
+            transition={{ delay: 0.4, duration: 0.5, ease: EASE }}
+            className="mt-8 text-center"
           >
-            <Lock size={11} />
-            100% secure · Powered by Stripe · No account required
+            <div className="inline-flex flex-col items-center gap-3">
+              <div className="flex items-center gap-3">
+                <div className="h-px w-12" style={{ background: COLORS.border[3] }} />
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: COLORS.text[3] }}>or</span>
+                <div className="h-px w-12" style={{ background: COLORS.border[3] }} />
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setSelectedTier(customTier)}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-[13px] font-poppins transition-all duration-300"
+                style={{
+                  background: `${COLORS.magenta[6]}10`,
+                  color: COLORS.magenta[6],
+                  border: `1px solid ${COLORS.magenta[6]}30`,
+                }}
+              >
+                <Gift size={16} />
+                I prefer a different amount
+              </motion.button>
+              <p className="text-[11px] max-w-xs mx-auto leading-relaxed" style={{ color: COLORS.text[3] }}>
+                You can make an optional contribution of any size.
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
-
-      <AnimatePresence>
-        {selectedTier && <PaymentModal tier={selectedTier} onClose={handleClose} />}
-      </AnimatePresence>
+      <AnimatePresence>{selectedTier && <DonationModal tier={selectedTier} onClose={() => setSelectedTier(null)} />}</AnimatePresence>
     </>
   );
 }

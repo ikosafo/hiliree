@@ -1,7 +1,9 @@
-﻿"use client";
+﻿// hiliree-web\src\components\sections\about\AboutFeatures.tsx
+"use client";
 import { useState, useRef, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
 import { TreePine, Heart, Lock, BookOpen, Calendar } from "lucide-react";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -11,35 +13,50 @@ const features = [
     icon: TreePine,
     title: "Dynamic Family Tree Mapping",
     description: "Craft rich, visual representations of your family structure with intuitive relationship tools and organized generational layers.",
-    color: "#6366f1",
+    color: COLORS.blue[6],
+    iconBg: COLORS.blue[1],
+    shadow: `${COLORS.blue[6]}0D`,
+    accent: COLORS.blue[5],
   },
   {
     id: "profiles",
     icon: Heart,
     title: "Smart, Customizable Profiles",
     description: "Capture meaningful details photos, locations, timelines, milestones and preserve each member's presence within the family legacy.",
-    color: "#7c3aed",
+    color: COLORS.brand[7],
+    iconBg: COLORS.brand[1],
+    shadow: `${COLORS.brand[7]}0D`,
+    accent: COLORS.brand[5],
   },
   {
     id: "chat",
     icon: Lock,
     title: "Secure Communication Suite",
     description: "Stay connected through built-in chat, voice, and video with privacy controls crafted to keep family conversations protected.",
-    color: "#d946ef",
+    color: COLORS.magenta[6],
+    iconBg: COLORS.magenta[1],
+    shadow: `${COLORS.magenta[6]}0D`,
+    accent: COLORS.magenta[5],
   },
   {
     id: "journals",
     icon: BookOpen,
     title: "Personal Journals & Shared Memories",
     description: "Document stories, reflections, and moments to build a living archive that future generations can discover.",
-    color: "#f59e0b",
+    color: COLORS.gold[6],
+    iconBg: COLORS.gold[1],
+    shadow: `${COLORS.gold[6]}0D`,
+    accent: COLORS.gold[5],
   },
   {
     id: "events",
     icon: Calendar,
     title: "Events, Reminders & Milestones",
     description: "Organize gatherings, send RSVPs, track anniversaries and birthdays, and keep everyone informed.",
-    color: "#10b981",
+    color: COLORS.success[6],
+    iconBg: COLORS.success[1],
+    shadow: `${COLORS.success[6]}0D`,
+    accent: COLORS.success[5],
   },
 ];
 
@@ -84,19 +101,19 @@ export function AboutFeatures() {
   return (
     <section
       className="relative py-16 md:py-20 overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #252540 0%, #1E1E30 50%, #1A1A28 100%)" }}
+      style={{ background: `linear-gradient(180deg, #252540 0%, #1E1E30 50%, #1A1A28 100%)` }}
     >
       <div
         className="absolute inset-0 opacity-[0.015] pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(circle, #6366f1 1px, transparent 1px)",
+          backgroundImage: `radial-gradient(circle, ${COLORS.blue[6]} 1px, transparent 1px)`,
           backgroundSize: "50px 50px",
         }}
       />
 
       <motion.div
         className="absolute -top-40 right-0 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none"
-        style={{ background: "rgba(99,102,241,0.05)" }}
+        style={{ background: `${COLORS.blue[6]}0D` }}
         animate={{ y: [0, 40, 0] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -110,14 +127,21 @@ export function AboutFeatures() {
           transition={{ duration: 0.6, ease: EASE }}
           className="text-center mb-14"
         >
-          <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#a5b4fc] bg-[#6366f1]/10 px-3.5 py-1.5 rounded-full border border-[#6366f1]/20 mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#818cf8]" />
+          <span
+            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] px-3.5 py-1.5 rounded-full border mb-5"
+            style={{
+              color: COLORS.blue[3],
+              backgroundColor: `${COLORS.blue[6]}1A`,
+              borderColor: `${COLORS.blue[6]}33`,
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: COLORS.blue[5] }} />
             Why Hiliree
           </span>
-          <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-[-0.02em]">
-            Modern tools for <em className="font-light italic text-white/40">timeless needs</em>
+          <h2 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl lg:text-5xl font-bold tracking-[-0.02em]" style={{ color: COLORS.text[5] }}>
+            Modern tools for <em className="font-light italic" style={{ color: `${COLORS.text[5]}66` }}>timeless needs</em>
           </h2>
-          <p className="text-sm md:text-base text-white/35 max-w-md mx-auto mt-4 font-light">
+          <p className="text-sm md:text-base max-w-md mx-auto mt-4 font-light" style={{ color: `${COLORS.text[5]}59` }}>
             Designed with intention, Hiliree provides families with everything needed to strengthen bonds and preserve legacy.
           </p>
         </motion.div>
@@ -138,13 +162,24 @@ export function AboutFeatures() {
                   const f = getSlide(offset - 1);
                   const Icon = f.icon;
                   return (
-                    <div key={`prev-${f.id}`} className="p-7 rounded-2xl" style={{ background: "#FFFFFF", boxShadow: `0 4px 24px ${f.color}0D, 0 1px 2px ${f.color}10` }}>
+                    <div
+                      key={`prev-${f.id}`}
+                      className="p-7 rounded-2xl"
+                      style={{
+                        background: COLORS.text[5],
+                        boxShadow: `0 4px 24px ${f.shadow}, 0 1px 2px ${f.color}1A`,
+                      }}
+                    >
                       <div className="h-0.5 w-8 rounded-full mb-5" style={{ background: f.color }} />
-                      <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: `${f.color}0F` }}>
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: f.iconBg }}>
                         <Icon className="w-5 h-5" style={{ color: f.color }} strokeWidth={1.5} />
                       </div>
-                      <h3 className="font-['Cormorant_Garamond',serif] text-lg font-bold mb-3 leading-snug" style={{ color: "#1A1814" }}>{f.title}</h3>
-                      <p className="text-[13px] text-gray-500 leading-relaxed font-light">{f.description}</p>
+                      <h3 className="font-['Cormorant_Garamond',serif] text-lg font-bold mb-3 leading-snug" style={{ color: COLORS.text[1] }}>
+                        {f.title}
+                      </h3>
+                      <p className="text-[13px] leading-relaxed font-light" style={{ color: COLORS.text[2] }}>
+                        {f.description}
+                      </p>
                     </div>
                   );
                 })}
@@ -167,19 +202,19 @@ export function AboutFeatures() {
                       whileHover={{ scale: 0.95, transition: { duration: 0.2 } }}
                       className="group relative p-7 rounded-2xl h-full"
                       style={{
-                        background: "#FFFFFF",
-                        boxShadow: `0 4px 24px ${f.color}0D, 0 1px 2px ${f.color}10`,
+                        background: COLORS.text[5],
+                        boxShadow: `0 4px 24px ${f.shadow}, 0 1px 2px ${f.color}1A`,
                       }}
                     >
                       <div className="flex flex-col h-full">
                         <div className="h-0.5 w-8 rounded-full mb-5" style={{ background: f.color }} />
-                        <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: `${f.color}0F` }}>
+                        <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: f.iconBg }}>
                           <Icon className="w-5 h-5" style={{ color: f.color }} strokeWidth={1.5} />
                         </div>
-                        <h3 className="font-['Cormorant_Garamond',serif] text-lg font-bold mb-3 leading-snug" style={{ color: "#1A1814" }}>
+                        <h3 className="font-['Cormorant_Garamond',serif] text-lg font-bold mb-3 leading-snug" style={{ color: COLORS.text[1] }}>
                           {f.title}
                         </h3>
-                        <p className="text-[13px] text-gray-500 leading-relaxed font-light flex-1">
+                        <p className="text-[13px] leading-relaxed font-light flex-1" style={{ color: COLORS.text[2] }}>
                           {f.description}
                         </p>
                       </div>
@@ -198,9 +233,9 @@ export function AboutFeatures() {
               onClick={goPrev}
               className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
               style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "rgba(255,255,255,0.5)",
+                background: `${COLORS.text[5]}0A`,
+                border: `1px solid ${COLORS.text[5]}14`,
+                color: `${COLORS.text[5]}80`,
               }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -222,7 +257,7 @@ export function AboutFeatures() {
                     background:
                       idx === currentIndex
                         ? features[idx].color
-                        : "rgba(255,255,255,0.12)",
+                        : `${COLORS.text[5]}1F`,
                   }}
                 />
               ))}
@@ -234,9 +269,9 @@ export function AboutFeatures() {
               onClick={goNext}
               className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
               style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "rgba(255,255,255,0.5)",
+                background: `${COLORS.text[5]}0A`,
+                border: `1px solid ${COLORS.text[5]}14`,
+                color: `${COLORS.text[5]}80`,
               }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,12 +286,13 @@ export function AboutFeatures() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.6, ease: EASE }}
-          className="text-center pt-12 mt-4 border-t border-white/[0.06]"
+          className="text-center pt-12 mt-4 border-t"
+          style={{ borderTopColor: `${COLORS.text[5]}0F` }}
         >
-          <h3 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl font-bold text-white mb-3 tracking-[-0.02em]">
-            Your Family. Your Story. <em className="font-light italic text-white/30">Nobody Else&apos;s.</em>
+          <h3 className="font-['Cormorant_Garamond',serif] text-3xl md:text-4xl font-bold mb-3 tracking-[-0.02em]" style={{ color: COLORS.text[5] }}>
+            Your Family. Your Story. <em className="font-light italic" style={{ color: `${COLORS.text[5]}4D` }}>Nobody Else&apos;s.</em>
           </h3>
-          <p className="text-white/25 text-[14px] leading-relaxed max-w-xl mx-auto font-light">
+          <p className="text-[14px] leading-relaxed max-w-xl mx-auto font-light" style={{ color: `${COLORS.text[5]}40` }}>
             Hiliree is more than a platform, it is a compass for families who value unity, heritage, and lasting connection.
           </p>
         </motion.div>

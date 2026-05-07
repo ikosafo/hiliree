@@ -2,6 +2,7 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { COLORS } from "@/components/common/ColorGuidePage";
 
 const steps = [
   {
@@ -10,8 +11,8 @@ const steps = [
     header: "The Root of Your Legacy",
     description: "Start with yourself. Every family story needs a beginning, and you are the foundation of this digital archive.",
     didYouKnow: "Strong family friendships in childhood are linked to greater happiness and confidence later in life.",
-    color: "#6366f1",
-    accentColor: "#818cf8",
+    color: COLORS.brand[5],
+    accentColor: COLORS.brand[4],
     imageUrl: "https://images.pexels.com/photos/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop",
   },
   {
@@ -20,8 +21,8 @@ const steps = [
     header: "Connections at a Glance",
     description: "Place parents, siblings, spouse, and children in their correct family lines. Siblings are automatically sorted by birthday.",
     didYouKnow: "The deepest recorded family tree traces back over 80 generations, over 2,500 years of continuous history.",
-    color: "#7c3aed",
-    accentColor: "#a78bfa",
+    color: COLORS.brand[4],
+    accentColor: COLORS.brand[3],
     imageUrl: "https://images.pexels.com/photos/2253879/pexels-photo-2253879.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop",
   },
   {
@@ -30,8 +31,8 @@ const steps = [
     header: "Gather the Circle",
     description: "Share an invite link from a relative's profile. Both sides must accept before the connection is official.",
     didYouKnow: "Mutual consent connections ensure only verified relatives see your shared tree, privacy at every root.",
-    color: "#d946ef",
-    accentColor: "#e879f9",
+    color: COLORS.cyan[6],
+    accentColor: COLORS.cyan[5],
     imageUrl: "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop",
   },
   {
@@ -40,8 +41,8 @@ const steps = [
     header: "Uncover Patterns",
     description: "Post Moments, celebrate birthdays, and uncover family patterns through the Life Chart and insights.",
     didYouKnow: "Your family name Phoenix symbolizes rebirth and resilience, rising stronger after every fall.",
-    color: "#f59e0b",
-    accentColor: "#fbbf24",
+    color: COLORS.warning[6],
+    accentColor: COLORS.warning[5],
     imageUrl: "https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop",
   },
 ];
@@ -94,7 +95,7 @@ export function HowItWorksSection() {
 
   return (
     <section
-    id="how-it-works"
+      id="how-it-works"
       className="relative py-20 md:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{ background: "linear-gradient(180deg, #1A1A28 0%, #1E1E30 50%, #252540 100%)" }}
       onMouseDown={handleMouseDown}
@@ -106,7 +107,7 @@ export function HowItWorksSection() {
       <div
         className="absolute inset-0 opacity-[0.015]"
         style={{
-          backgroundImage: "radial-gradient(circle, #6366f1 1px, transparent 1px)",
+          backgroundImage: `radial-gradient(circle, ${COLORS.brand[5]} 1px, transparent 1px)`,
           backgroundSize: "50px 50px",
         }}
       />
@@ -124,15 +125,19 @@ export function HowItWorksSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#a5b4fc] bg-[#6366f1]/10 px-3.5 py-1.5 rounded-full mb-5 border border-[#6366f1]/20"
+            className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-white px-3.5 py-1.5 rounded-full mb-5 border"
+            style={{
+              backgroundColor: `${COLORS.brand[5]}10`,
+              borderColor: `${COLORS.brand[5]}20`,
+            }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#818cf8]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-white" />
             How It Works
           </motion.span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 tracking-[-0.02em] font-['Cormorant_Garamond',serif]">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 tracking-[-0.02em] font-['Cormorant_Garamond',serif] text-white">
             Build your family tree
           </h2>
-          <p className="text-sm md:text-base text-white/35 max-w-md mx-auto font-light">
+          <p className="text-sm md:text-base max-w-md mx-auto font-light" style={{ color: `${COLORS.text[5]}59` }}>
             Four simple steps to create your living family archive
           </p>
         </motion.div>
@@ -194,10 +199,10 @@ export function HowItWorksSection() {
                     <div
                       className="relative w-full overflow-hidden rounded-2xl"
                       style={{
-                        background: isCurrent ? "#FFFFFF" : "#E8E8EC",
+                        background: isCurrent ? COLORS.text[5] : COLORS.border[2],
                         border: isCurrent
                           ? `1px solid ${step.color}20`
-                          : "1px solid rgba(0,0,0,0.06)",
+                          : `1px solid ${COLORS.border[1]}`,
                         boxShadow: isCurrent
                           ? `0 20px 40px -10px rgba(0,0,0,0.15)`
                           : "none",
@@ -206,9 +211,9 @@ export function HowItWorksSection() {
                       {/* Greyed out image area for stacked cards */}
                       {!isCurrent && (
                         <div className="relative h-32 sm:h-36 overflow-hidden">
-                          <div 
+                          <div
                             className="w-full h-full"
-                            style={{ background: "#D8D8DE" }}
+                            style={{ background: COLORS.border[3] }}
                           />
                           <div
                             className="absolute inset-0"
@@ -234,7 +239,7 @@ export function HowItWorksSection() {
                       {/* Active card content */}
                       {isCurrent && (
                         <>
-                          {/* DID YOU KNOW - First */}
+                          {/* DID YOU KNOW */}
                           <div className="px-5 sm:px-6 pt-5 pb-3">
                             <div
                               className="rounded-lg p-3 flex items-start gap-2.5"
@@ -251,14 +256,14 @@ export function HowItWorksSection() {
                                 >
                                   Did you know?
                                 </span>
-                                <p className="text-[11px] leading-relaxed font-light text-gray-600">
+                                <p className="text-[11px] leading-relaxed font-light" style={{ color: COLORS.text[2] }}>
                                   {step.didYouKnow}
                                 </p>
                               </div>
                             </div>
                           </div>
 
-                          {/* IMAGE - Second */}
+                          {/* IMAGE */}
                           <div className="relative h-36 sm:h-40 mx-5 sm:mx-6 rounded-xl overflow-hidden">
                             <Image
                               src={step.imageUrl}
@@ -271,7 +276,7 @@ export function HowItWorksSection() {
                             <div
                               className="absolute inset-0"
                               style={{
-                                background: `linear-gradient(180deg, transparent 50%, rgba(255,255,255,0.9) 100%)`,
+                                background: `linear-gradient(180deg, transparent 50%, ${COLORS.text[5]}e6 100%)`,
                               }}
                             />
                             <div className="absolute top-3 left-3">
@@ -279,7 +284,7 @@ export function HowItWorksSection() {
                                 className="text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1.5 rounded-lg"
                                 style={{
                                   background: step.color,
-                                  color: "#fff",
+                                  color: COLORS.text[5],
                                   boxShadow: `0 4px 12px ${step.color}30`,
                                 }}
                               >
@@ -288,9 +293,9 @@ export function HowItWorksSection() {
                             </div>
                           </div>
 
-                          {/* CONTENT - Last */}
+                          {/* CONTENT */}
                           <div className="px-5 sm:px-6 pt-4 pb-5">
-                            <h3 className="text-xl sm:text-2xl font-bold mb-1 tracking-[-0.01em] text-gray-900">
+                            <h3 className="text-xl sm:text-2xl font-bold mb-1 tracking-[-0.01em]" style={{ color: COLORS.text[1] }}>
                               {step.title}
                             </h3>
                             <p
@@ -299,7 +304,7 @@ export function HowItWorksSection() {
                             >
                               {step.header}
                             </p>
-                            <p className="text-[13px] leading-relaxed font-light text-gray-500">
+                            <p className="text-[13px] leading-relaxed font-light" style={{ color: COLORS.text[2] }}>
                               {step.description}
                             </p>
 
@@ -338,7 +343,10 @@ export function HowItWorksSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-4"
           >
-            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/20 block mb-4 px-2">
+            <span
+              className="text-[9px] font-bold uppercase tracking-[0.2em] block mb-4 px-2"
+              style={{ color: `${COLORS.text[5]}33` }}
+            >
               Select Step
             </span>
 
@@ -353,16 +361,16 @@ export function HowItWorksSection() {
                   onClick={() => setIndex(i)}
                   className="w-full group relative p-3 rounded-xl cursor-pointer transition-all duration-300 text-left"
                   style={{
-                    background: i === index ? `rgba(255,255,255,0.08)` : "transparent",
-                    border: i === index ? `1px solid rgba(255,255,255,0.1)` : "1px solid transparent",
+                    background: i === index ? `${COLORS.text[5]}14` : "transparent",
+                    border: i === index ? `1px solid ${COLORS.text[5]}1a` : "1px solid transparent",
                   }}
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold transition-all duration-300"
                       style={{
-                        background: i === index ? step.color : "rgba(255,255,255,0.05)",
-                        color: i === index ? "#FFFFFF" : "rgba(255,255,255,0.3)",
+                        background: i === index ? step.color : `${COLORS.text[5]}0d`,
+                        color: i === index ? COLORS.text[5] : `${COLORS.text[5]}4d`,
                       }}
                     >
                       {step.number}
@@ -371,13 +379,13 @@ export function HowItWorksSection() {
                     <div className="flex-1 min-w-0">
                       <h4
                         className="text-[12px] font-semibold transition-colors duration-300"
-                        style={{ color: i === index ? "#FFFFFF" : "rgba(255,255,255,0.4)" }}
+                        style={{ color: i === index ? COLORS.text[5] : `${COLORS.text[5]}66` }}
                       >
                         {step.title}
                       </h4>
                       <p
                         className="text-[10px] font-medium transition-colors duration-300 mt-0.5"
-                        style={{ color: i === index ? step.accentColor : "rgba(255,255,255,0.2)" }}
+                        style={{ color: i === index ? step.accentColor : `${COLORS.text[5]}33` }}
                       >
                         {step.header}
                       </p>
@@ -395,9 +403,12 @@ export function HowItWorksSection() {
             <div className="flex items-center justify-between mt-5 px-2">
               <button
                 onClick={handlePrev}
-                className="w-8 h-8 rounded-lg border border-white/[0.08] flex items-center justify-center hover:bg-white/[0.05] transition-all duration-200"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200"
+                style={{
+                  border: `1px solid ${COLORS.text[5]}14`,
+                }}
               >
-                <svg className="w-3 h-3 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3" style={{ color: `${COLORS.text[5]}66` }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
@@ -411,7 +422,7 @@ export function HowItWorksSection() {
                     style={{
                       width: i === index ? "20px" : "5px",
                       height: "5px",
-                      background: i === index ? step.color : "rgba(255,255,255,0.15)",
+                      background: i === index ? step.color : `${COLORS.text[5]}26`,
                     }}
                   />
                 ))}
@@ -419,9 +430,12 @@ export function HowItWorksSection() {
 
               <button
                 onClick={handleNext}
-                className="w-8 h-8 rounded-lg border border-white/[0.08] flex items-center justify-center hover:bg-white/[0.05] transition-all duration-200"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200"
+                style={{
+                  border: `1px solid ${COLORS.text[5]}14`,
+                }}
               >
-                <svg className="w-3 h-3 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3" style={{ color: `${COLORS.text[5]}66` }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                 </svg>
               </button>
